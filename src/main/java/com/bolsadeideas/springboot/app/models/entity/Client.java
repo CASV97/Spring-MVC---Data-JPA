@@ -26,7 +26,7 @@ public class Client implements Serializable {
 	private String lastName;
 
 	private String email;
-
+	// usamos @Column pues que las convenciones son distintos NON_camell_case
 	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
