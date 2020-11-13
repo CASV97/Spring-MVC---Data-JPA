@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"/>
 <title th:text="${title}"></title>
 </head>
 <body>
-<h1 th:text="${title}"></h1>
+	<h1 th:text="${title}"></h1>
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email</th>
+				<th>Date</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="client : ${clients}">
+				<td th:text="${client.id}"></td>
+				<td th:text="${client.firstName}"></td>
+				<td th:text="${client.lastName}"></td>
+				<td th:text="${client.email}"></td>
+				<td th:text="${client.email}"></td>
+			</tr>
+		</tbody>
+
+	</table>
 
 </body>
 </html>
