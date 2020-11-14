@@ -46,4 +46,19 @@ public class ClientDaoImpl implements IClientDao {
 		return em.createQuery("from Client").getResultList();
 	}
 
+	/**
+	 * Deberá ir anotado con el decorador {@code @Transactional}, ya que es de
+	 * escritura, el método persist del entity manager, lo que hace es tomar el
+	 * objeto Entity y lo guarda dentro del contexto de persistencia o persistencia
+	 * JPA, una vez que se realize el commit() y el flush(), se va a sincronizar con
+	 * la base de datos y va a realizar el INSERT INTO en la tabla, todo eso lo hace
+	 * de forma automática y transparente dentro del
+	 * {@code EntityManager.persist()},
+	 */
+	@Override
+	public void save(Client client) {
+		em.persist(client);
+
+	}
+
 }
