@@ -55,6 +55,7 @@ public class ClientDaoImpl implements IClientDao {
 	 * de forma automática y transparente dentro del
 	 * {@code EntityManager.persist()},
 	 */
+	@Transactional
 	@Override
 	public void save(Client client) {
 		em.persist(client);

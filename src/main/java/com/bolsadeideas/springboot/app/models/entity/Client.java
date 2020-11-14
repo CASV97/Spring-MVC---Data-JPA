@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,6 +33,19 @@ public class Client implements Serializable {
 	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
+
+	/**
+	 * creamos método prepersist es decir antes de que se guarde en la base de datos
+	 * para asignar la fecha de creación, pero para que se ejecute este metodo como
+	 * un evento que es parte del ciclo de vida de la clase entity, manejada con el
+	 * entity manager tendra que ir decorada con la anotacion {@code @PrePersist},
+	 * asi se va a llamar justo antes de invocar el método presist(entity) del
+	 * Entity Manager, antes de insertar el registro en la base de datos
+	 */
+	@PrePersist
+	public void prePersist() {
+		createAt = new Date();
+	}
 
 	public Long getId() {
 		return id;
