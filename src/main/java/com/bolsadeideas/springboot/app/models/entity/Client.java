@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "clients")
 public class Client implements Serializable {
@@ -32,6 +34,7 @@ public class Client implements Serializable {
 	// usamos @Column pues que las convenciones son distintos NON_camell_case
 	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date createAt;
 
 	/**
@@ -42,10 +45,10 @@ public class Client implements Serializable {
 	 * asi se va a llamar justo antes de invocar el método presist(entity) del
 	 * Entity Manager, antes de insertar el registro en la base de datos
 	 */
-	@PrePersist
+	/*@PrePersist
 	public void prePersist() {
 		createAt = new Date();
-	}
+	}*/
 
 	public Long getId() {
 		return id;
