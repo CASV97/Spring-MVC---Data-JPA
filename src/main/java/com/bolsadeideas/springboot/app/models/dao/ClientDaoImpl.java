@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bolsadeideas.springboot.app.models.entity.Client;
 
 /**
+ * <h1>Dao CRUD</h1>
  * <ol>
  * <li>El siguiente paso es decorar la siguiente clase con la Annotation
  * {@code @Repository}, es una anotación de Spring para marcar la clase como
@@ -38,7 +39,7 @@ public class ClientDaoImpl implements IClientDao {
 	 * contenido del siguiento método t lo va a envolver dentro de una transaccion
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
+	@Transactional(readOnly = true)
 	@Override
 	public List<Client> findAll() {
 		// vamos a realizar una consulta con .createQuery("from
@@ -73,10 +74,18 @@ public class ClientDaoImpl implements IClientDao {
 	 * sus datos y mostrarlo en el formulario
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Client findOne(Long id) {
 		// seria bastante facil encontrar este dato con el método find del entity
 		// manager
 		return em.find(Client.class, id);
+	}
+
+	@Transactional
+	@Override
+	public void delete(Long id) {
+		em.remove(findOne(id));
+
 	}
 
 }

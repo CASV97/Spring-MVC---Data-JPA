@@ -74,7 +74,7 @@ public class ClientController {
 
 	/**
 	 * Para editar lo hacemos con el parametro id y en la vista list creamos el link
-	 * para editar
+	 * para editar requestMapping sin el metodo por defeto es un GET
 	 */
 	@RequestMapping(value = "/form/{id}")
 	public String edit(@PathVariable(value = "id") Long id, Map<String, Object> model) {
@@ -87,5 +87,13 @@ public class ClientController {
 		model.put("client", client);
 		model.put("title", "Edit CLient");
 		return "form";
+	}
+
+	@GetMapping("/delete/{id}")
+	public String delete(@PathVariable(value = "id") Long id) {
+		if (id > 0) {
+			clientDao.delete(id);
+		}
+		return "redirect:/list";
 	}
 }
