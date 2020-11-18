@@ -58,8 +58,25 @@ public class ClientDaoImpl implements IClientDao {
 	@Transactional
 	@Override
 	public void save(Client client) {
-		em.persist(client);
+		// mecanismo para hacer Update
+		if (client.getId() != null && client.getId() > 0) {
+			// el metodo merge actualiza los métodos existentes
+			em.merge(client);
+		} else {
+			em.persist(client);
+		}
 
+	}
+
+	/**
+	 * para editar un Cliente habría que ir a buscarlo en la base de datos con todos
+	 * sus datos y mostrarlo en el formulario
+	 */
+	@Override
+	public Client findOne(Long id) {
+		// seria bastante facil encontrar este dato con el método find del entity
+		// manager
+		return em.find(Client.class, id);
 	}
 
 }

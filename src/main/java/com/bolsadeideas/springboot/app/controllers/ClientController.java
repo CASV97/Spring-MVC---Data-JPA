@@ -10,12 +10,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.bolsadeideas.springboot.app.models.dao.IClientDao;
 import com.bolsadeideas.springboot.app.models.entity.Client;
 
 @Controller
+@SessionAttributes("client")
 public class ClientController {
 	@Autowired
 	@Qualifier("clientDaoJPA")
@@ -47,9 +52,10 @@ public class ClientController {
 	/**
 	 * Como segunda fase cuando el usuario envía con un SUBMIT los datos del
 	 * formulario, vamos a tener un metodo que se encarge de procesar estos datos
+	 * aqui se elimina el atributo de session
 	 */
 	@PostMapping("/form")
-	public String save(@Valid Client client, BindingResult result, Model model) {
+	public String save(@Valid Client client, BindingResult result, Model model, SessionStatus status) {
 		if (result.hasErrors()) {
 			model.addAttribute("title", "Client Form");
 			/*
@@ -60,7 +66,26 @@ public class ClientController {
 			return "form";
 		}
 		clientDao.save(client);
+		// va a eliminar el objeto cliente de la session
+		status.setComplete();
 		return "redirect:list";
 
+	}
+
+	/**
+	 * Para editar lo hacemos con el parametro id y en la vista list creamos el link
+	 * para editar
+	 */
+	@RequestMapping(value = "/form/{id}")
+	public String edit(@PathVariable(value = "id") Long id, Map<String, Object> model) {
+		Client client = null;
+		if (id > 0) {
+			client = clientDao.findOne(id);
+		} else {
+			return "redirect:/list";
+		}
+		model.put("client", client);
+		model.put("title", "Edit CLient");
+		return "form";
 	}
 }

@@ -67,8 +67,12 @@
 						class="btn btn-primary">
 				</div>
 			</div>
-			<!-- El ID es autoIncrememntal irá oculto -->
-			<input type="hidden" th:field="*{id}">
+			<!-- El ID es autoIncrememntal irá oculto, como buena practica a diferencia del 
+			input:hidden es mejor utilizar @SessionAtributes en el controlador y cuando se 
+			resulva ese formulario liberar ese atributo desde el handler con el objeto SessionStatus
+			status.setComplete esto es mucho mas seguro-->
+			<!-- <input type="hidden" th:field="*{id}"> -->
+
 		</form>
 	</div>
 </body>
