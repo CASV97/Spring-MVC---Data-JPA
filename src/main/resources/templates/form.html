@@ -41,7 +41,7 @@
 			<div class="form-group row">
 				<label class="col-form-label col-sm-2">Email</label>
 				<div class="col-sm-6">
-					<input th:field="*{email}" type="email" class="form-control"
+					<input th:field="*{email}" type="text" class="form-control"
 						th:errorclass="'form-control alert-danger'">
 					<small class="form-text text-danger"
 						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
