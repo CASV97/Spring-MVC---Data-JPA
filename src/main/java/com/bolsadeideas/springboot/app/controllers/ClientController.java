@@ -5,7 +5,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,20 +15,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.bolsadeideas.springboot.app.models.dao.IClientDao;
 import com.bolsadeideas.springboot.app.models.entity.Client;
+import com.bolsadeideas.springboot.app.service.IClientService;
 
 @Controller
 @SessionAttributes("client")
 public class ClientController {
 	@Autowired
-	@Qualifier("clientDaoJPA")
-	private IClientDao clientDao;
+	private IClientService clientService;
 
 	@GetMapping("/list")
 	public String showClientsList(Model model) {
 		model.addAttribute("title", "Client List");
-		model.addAttribute("clients", clientDao.findAll());
+		model.addAttribute("clients", clientService.findAll());
 		return "clientlist";
 	}
 
@@ -65,7 +63,7 @@ public class ClientController {
 			 */
 			return "form";
 		}
-		clientDao.save(client);
+		clientService.save(client);
 		// va a eliminar el objeto cliente de la session
 		status.setComplete();
 		return "redirect:list";
@@ -80,7 +78,7 @@ public class ClientController {
 	public String edit(@PathVariable(value = "id") Long id, Map<String, Object> model) {
 		Client client = null;
 		if (id > 0) {
-			client = clientDao.findOne(id);
+			client = clientService.findOne(id);
 		} else {
 			return "redirect:/list";
 		}
@@ -92,7 +90,7 @@ public class ClientController {
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable(value = "id") Long id) {
 		if (id > 0) {
-			clientDao.delete(id);
+			clientService.delete(id);
 		}
 		return "redirect:/list";
 	}
