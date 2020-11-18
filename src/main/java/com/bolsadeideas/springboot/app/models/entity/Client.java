@@ -8,10 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -24,14 +26,20 @@ public class Client implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotEmpty
 	@Column(name = "first_name")
 	private String firstName;
 
+	@NotEmpty
 	@Column(name = "last_name")
 	private String lastName;
 
+	@NotEmpty
+	@Email
 	private String email;
+
 	// usamos @Column pues que las convenciones son distintos NON_camell_case
+	@NotNull
 	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -45,10 +53,9 @@ public class Client implements Serializable {
 	 * asi se va a llamar justo antes de invocar el método presist(entity) del
 	 * Entity Manager, antes de insertar el registro en la base de datos
 	 */
-	/*@PrePersist
-	public void prePersist() {
-		createAt = new Date();
-	}*/
+	/*
+	 * @PrePersist public void prePersist() { createAt = new Date(); }
+	 */
 
 	public Long getId() {
 		return id;

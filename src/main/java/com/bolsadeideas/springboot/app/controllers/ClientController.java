@@ -2,10 +2,13 @@ package com.bolsadeideas.springboot.app.controllers;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -46,7 +49,16 @@ public class ClientController {
 	 * formulario, vamos a tener un metodo que se encarge de procesar estos datos
 	 */
 	@PostMapping("/form")
-	public String save(Client client) {
+	public String save(@Valid Client client, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("title", "Client Form");
+			/*
+			 * cuando falla pasa la validación, Spring añade el objeto como atributo de
+			 * forma automática, siempre y cuando el T tipo de la clase, se llame igual que
+			 * el nombre con el cual se está pasando a la vista, en este caso client
+			 */
+			return "form";
+		}
 		clientDao.save(client);
 		return "redirect:list";
 
