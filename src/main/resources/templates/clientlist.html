@@ -6,44 +6,47 @@
 	<!-- menú de navegación de bootstrap  -->
 	<header th:replace="layout/layout :: header"></header>
 	<!-- body -->
-	<div class="container">
-		<h1 th:text="${title}"
-			class="text-terceary border border-success border-top-0 border-left-0 border-right-0"></h1>
-		<p>
-			<a class="btn btn-success btn-xs" th:href="@{/form}">New Client</a>
-		</p>
-		<table class="table table-striped">
-			<thead class="thead-dark">
-				<tr>
-					<th>ID</th>
-					<th>First Name</th>
-					<th>Last Name</th>
-					<th>Email</th>
-					<th>Date</th>
-					<th>Edit</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="client : ${clients}">
-					<td th:text="${client.id}"></td>
-					<td th:text="${client.firstName}"></td>
-					<td th:text="${client.lastName}"></td>
-					<td th:text="${client.email}"></td>
-					<td th:text="${client.createAt}"></td>
-					<td>
-						<a class="btn btn-primary btn-xs"
-							th:href="@{/form/} + ${client.id}" th:text="Edit"></a>
-					</td>
-					<td>
-						<a class="btn btn-danger btn-xs"
-							th:href="@{/delete/} + ${client.id}" th:text="Delete"
-							onclick="return confirm('Are you sure do you want delete?')"></a>
-					</td>
-				</tr>
-			</tbody>
+	<div class="container py-4">
+		<div class="card bg-ligth">
+			<div class="card-header" th:text="${title}"></div>
+			<div class="card-body">
+				<h4 class="card-title">
+					<a class="btn btn-primary btn-xs" th:href="@{/form}">New Client</a>
+				</h4>
+				<table class="table table-striped">
+					<thead class="thead-dark">
+						<tr>
+							<th>ID</th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Email</th>
+							<th>Date</th>
+							<th>Edit</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="client : ${clients}">
+							<td th:text="${client.id}"></td>
+							<td th:text="${client.firstName}"></td>
+							<td th:text="${client.lastName}"></td>
+							<td th:text="${client.email}"></td>
+							<td th:text="${client.createAt}"></td>
+							<td>
+								<a class="btn btn-primary btn-xs"
+									th:href="@{/form/} + ${client.id}" th:text="Edit"></a>
+							</td>
+							<td>
+								<a class="btn btn-danger btn-xs"
+									th:href="@{/delete/} + ${client.id}" th:text="Delete"
+									onclick="return confirm('Are you sure do you want delete?')"></a>
+							</td>
+						</tr>
+					</tbody>
 
-		</table>
+				</table>
+			</div>
+		</div>
 	</div>
 	<!-- Footer -->
 	<footer th:replace="layout/layout :: footer"></footer>
