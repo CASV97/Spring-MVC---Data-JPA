@@ -26,29 +26,34 @@ import com.bolsadeideas.springboot.app.models.entity.Client;
 public class ClientServiceImpl implements IClientService {
 	@Autowired
 	private IClientDao clientDao;
-	
+
 	@Transactional(readOnly = true)
 	@Override
 	public List<Client> findAll() {
-		return clientDao.findAll();
+		return (List<Client>) clientDao.findAll();
 	}
+
 	@Transactional
 	@Override
 	public void save(Client client) {
 		clientDao.save(client);
 
 	}
-	
+
+	/**
+	 * @return devulve un Optional<Client> que e nvielve el resultado de la consulta
+	 *         o el objeto, permite controlar errores del objeto
+	 */
 	@Transactional(readOnly = true)
 	@Override
 	public Client findOne(Long id) {
-		return clientDao.findOne(id);
+		return clientDao.findById(id).orElse(null);
 	}
-	
+
 	@Transactional
 	@Override
 	public void delete(Long id) {
-		clientDao.delete(id);
+		clientDao.deleteById(id);
 	}
 
 }

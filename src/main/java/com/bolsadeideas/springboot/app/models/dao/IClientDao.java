@@ -1,24 +1,18 @@
 package com.bolsadeideas.springboot.app.models.dao;
 
-import java.util.List;
+import org.springframework.data.repository.CrudRepository;
 
 import com.bolsadeideas.springboot.app.models.entity.Client;
 
 /**
  * @author ariel
  *
- *         Lo que primero creamos para el DATA ACCESS OBJECT o antes de crear la
- *         clase es la interfaz que, <b>contiene el protocolo de
- *         comportamiento</b>, es decir, los métodos que tienen que implementar
- *         la clase DAO
+ *         Convertiremos esta interfaz en nuestro CRUD Repository, para eso debe
+ *         de extender de las interfaces <code> CrudRepository </code>o
+ *         <code>JpaRepository </code> lo podemos inyectar sin necesidad de
+ *         declarar el Bean o agragar una anotacion como {@code @Repository} por
+ *         que por debajo ya es un componente Spring y hereda de CrudRepository
  */
-public interface IClientDao {
+public interface IClientDao extends CrudRepository<Client, Long> {
 
-	public List<Client> findAll();
-
-	public void save(Client client);
-
-	public Client findOne(Long id);
-
-	public void delete(Long id);
 }
