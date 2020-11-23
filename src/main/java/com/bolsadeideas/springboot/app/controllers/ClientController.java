@@ -5,6 +5,9 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -25,10 +29,25 @@ public class ClientController {
 	@Autowired
 	private IClientService clientService;
 
+	/**
+	 * Despues de modificar el repositorio por PagingAndSortingRepository para
+	 * paginar los resultados consulta e implementar el nuevo método que hace uso
+	 * del iterable {@code Page} lo primero que tenemos que hacer es obtener la
+	 * pagina actual mediante la ruta URL, por ejemplo podemos usar un
+	 * {@code RequestParam}
+	 */
 	@GetMapping("/list")
-	public String showClientsList(Model model) {
+	public String showClientsList(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+		/*
+		 * forma que se usaba en Springboot 1.5.* Pageable pageRequest = new
+		 * PageRequest(page,size);
+		 */
+		Pageable pageRequest = PageRequest.of(page, 4);
+
+		Page<Client> clients = clientService.findAll(pageRequest);
+
 		model.addAttribute("title", "Client List");
-		model.addAttribute("clients", clientService.findAll());
+		model.addAttribute("clients", clients);
 		return "clientlist";
 	}
 
