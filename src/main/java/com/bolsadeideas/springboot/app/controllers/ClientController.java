@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.entity.Client;
 import com.bolsadeideas.springboot.app.service.IClientService;
@@ -53,7 +54,8 @@ public class ClientController {
 	 * aqui se elimina el atributo de session
 	 */
 	@PostMapping("/form")
-	public String save(@Valid Client client, BindingResult result, Model model, SessionStatus status) {
+	public String save(@Valid Client client, BindingResult result, Model model, RedirectAttributes flash,
+			SessionStatus status) {
 		if (result.hasErrors()) {
 			model.addAttribute("title", "Client Form");
 			/*
@@ -63,9 +65,13 @@ public class ClientController {
 			 */
 			return "form";
 		}
+		// tendremos que validar el id de cliente para saber si hace un insert o un
+		// update para enviar el mensaje flash correspondiente
+		String messageFlash = (client.getId() != null) ? "Client edited successfully" : "Client saved successfully";
 		clientService.save(client);
 		// va a eliminar el objeto cliente de la session
 		status.setComplete();
+		flash.addFlashAttribute("success", messageFlash);
 		return "redirect:list";
 
 	}
@@ -75,11 +81,16 @@ public class ClientController {
 	 * para editar requestMapping sin el metodo por defeto es un GET
 	 */
 	@RequestMapping(value = "/form/{id}")
-	public String edit(@PathVariable(value = "id") Long id, Map<String, Object> model) {
+	public String edit(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 		Client client = null;
 		if (id > 0) {
 			client = clientService.findOne(id);
+			if (client == null) {
+				flash.addFlashAttribute("error", "Client id doesn't exist in database");
+				return "redirect:/list";
+			}
 		} else {
+			flash.addFlashAttribute("error", "Client id cannot be 0");
 			return "redirect:/list";
 		}
 		model.put("client", client);
@@ -88,9 +99,10 @@ public class ClientController {
 	}
 
 	@GetMapping("/delete/{id}")
-	public String delete(@PathVariable(value = "id") Long id) {
+	public String delete(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if (id > 0) {
 			clientService.delete(id);
+			flash.addFlashAttribute("success", "client removed successfully");
 		}
 		return "redirect:/list";
 	}
