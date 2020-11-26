@@ -16,7 +16,10 @@
 					</ul>
 				</div>
 				<!-- El atributo action contiene URL hacia la ruta que procesa el formulario -->
-				<form th:action="@{/form}" th:object="${client}" method="post">
+				<!-- El atributo enctype basicamente es una codificación con el valor multipart form
+				 data que permite enviar archivos como datos en el request -->
+				<form th:action="@{/form}" th:object="${client}" method="post"
+					enctype="multipart/form-data">
 
 					<div class="form-group row">
 						<label class="col-form-label col-sm-2">First Name</label>

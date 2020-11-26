@@ -44,6 +44,10 @@ public class Client implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date createAt;
+	
+	//atributo para la imagen de fichero
+	
+	private String photo;
 
 	/**
 	 * creamos método prepersist es decir antes de que se guarde en la base de datos
@@ -99,6 +103,14 @@ public class Client implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 }
