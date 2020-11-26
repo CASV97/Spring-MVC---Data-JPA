@@ -43,10 +43,10 @@
 							</td>
 						</tr>
 					</tbody>
-
-				</table>
-			</div>
+				</table> <!-- Agregando el fragmento del paginador -->
+				<nav th:replace="components/paginator-nav :: paginator"></nav>
 		</div>
+	</div>
 	</div>
 	<!-- Footer -->
 	<footer th:replace="layout/layout :: footer"></footer>

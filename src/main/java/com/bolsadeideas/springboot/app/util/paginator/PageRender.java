@@ -73,7 +73,7 @@ public class PageRender<T> {
 		}
 		// recorrer el hasta (until)
 		for (int i = 0; i < until; i++) {
-			pages.add(new PageItem(from + 1, currentPage == from + i));
+			pages.add(new PageItem(from + i, currentPage == from + i));
 		}
 
 	}

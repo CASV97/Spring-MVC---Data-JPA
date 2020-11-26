@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.entity.Client;
 import com.bolsadeideas.springboot.app.service.IClientService;
+import com.bolsadeideas.springboot.app.util.paginator.PageRender;
 
 @Controller
 @SessionAttributes("client")
@@ -42,12 +43,15 @@ public class ClientController {
 		 * forma que se usaba en Springboot 1.5.* Pageable pageRequest = new
 		 * PageRequest(page,size);
 		 */
-		Pageable pageRequest = PageRequest.of(page, 4);
+		Pageable pageRequest = PageRequest.of(page,8);
 
 		Page<Client> clients = clientService.findAll(pageRequest);
-
+		
+		PageRender<Client> pageRender= new PageRender<>("/list", clients);
+		//pasando datos a la vista
 		model.addAttribute("title", "Client List");
 		model.addAttribute("clients", clients);
+		model.addAttribute("page",pageRender);
 		return "clientlist";
 	}
 
