@@ -1,5 +1,9 @@
 package com.bolsadeideas.springboot.app.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.entity.Client;
@@ -43,15 +48,15 @@ public class ClientController {
 		 * forma que se usaba en Springboot 1.5.* Pageable pageRequest = new
 		 * PageRequest(page,size);
 		 */
-		Pageable pageRequest = PageRequest.of(page,8);
+		Pageable pageRequest = PageRequest.of(page, 8);
 
 		Page<Client> clients = clientService.findAll(pageRequest);
-		
-		PageRender<Client> pageRender= new PageRender<>("/list", clients);
-		//pasando datos a la vista
+
+		PageRender<Client> pageRender = new PageRender<>("/list", clients);
+		// pasando datos a la vista
 		model.addAttribute("title", "Client List");
 		model.addAttribute("clients", clients);
-		model.addAttribute("page",pageRender);
+		model.addAttribute("page", pageRender);
 		return "clientlist";
 	}
 
@@ -77,8 +82,8 @@ public class ClientController {
 	 * aqui se elimina el atributo de session
 	 */
 	@PostMapping("/form")
-	public String save(@Valid Client client, BindingResult result, Model model, RedirectAttributes flash,
-			SessionStatus status) {
+	public String save(@Valid Client client, BindingResult result, Model model,
+			@RequestParam("file") MultipartFile photoFile, RedirectAttributes flash, SessionStatus status) {
 		if (result.hasErrors()) {
 			model.addAttribute("title", "Client Form");
 			/*
@@ -88,6 +93,29 @@ public class ClientController {
 			 */
 			return "form";
 		}
+		/*
+		 * verificando que el fichero no esté vacio para para poder concatenar el nombre
+		 * del archivo para poder escribir o mover la imagen es ese directorio
+		 */
+		if (!photoFile.isEmpty()) {
+			Path uploadsResourcesPath = Paths.get("src//main//resources//static/uploads");
+			String rootPath = uploadsResourcesPath.toFile().getAbsolutePath();
+			// obteniendo los bytes de la imagen
+			try {
+				byte[] bytes = photoFile.getBytes();
+				// lo siguiente es tener la ruta final con el nombre del archivo
+				Path completePath = Paths.get(rootPath + "//" + photoFile.getOriginalFilename());
+				// finalmente con escribimos la imagen en el directorio upload
+				Files.write(completePath, bytes);
+				flash.addFlashAttribute("info", "Has uploaded successufully '" + photoFile.getOriginalFilename() + "'");
+
+				client.setPhoto(photoFile.getOriginalFilename());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 		// tendremos que validar el id de cliente para saber si hace un insert o un
 		// update para enviar el mensaje flash correspondiente
 		String messageFlash = (client.getId() != null) ? "Client edited successfully" : "Client saved successfully";
