@@ -46,7 +46,7 @@ public class ClientController {
 		}
 		model.put("client", client);
 		model.put("title", "Client Detail");
-		return "show";
+		return "clients/showdetails";
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class ClientController {
 		model.addAttribute("title", "Client List");
 		model.addAttribute("clients", clients);
 		model.addAttribute("page", pageRender);
-		return "clientlist";
+		return "clients/clientlist";
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class ClientController {
 
 		model.put("client", client);
 		model.put("title", "Client's form");
-		return "form";
+		return "clients/form";
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class ClientController {
 		// va a eliminar el objeto cliente de la session
 		status.setComplete();
 		flash.addFlashAttribute("success", messageFlash);
-		return "redirect:list";
+		return "redirect:/list";
 
 	}
 
@@ -160,7 +160,7 @@ public class ClientController {
 		}
 		model.put("client", client);
 		model.put("title", "Edit CLient");
-		return "form";
+		return "clients/form";
 	}
 
 	@GetMapping("/delete/{id}")

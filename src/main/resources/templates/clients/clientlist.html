@@ -27,7 +27,10 @@
 					</thead>
 					<tbody>
 						<tr th:each="client : ${clients}">
-							<td th:text="${client.id}"></td>
+							<td>
+								<a class="btn btn-primary btn-xs"
+									th:href="@{/show/} + ${client.id}" th:text="${client.id}"></a>
+							</td>
 							<td th:text="${client.firstName}"></td>
 							<td th:text="${client.lastName}"></td>
 							<td th:text="${client.email}"></td>
@@ -43,10 +46,11 @@
 							</td>
 						</tr>
 					</tbody>
-				</table> <!-- Agregando el fragmento del paginador -->
+				</table>
+				<!-- Agregando el fragmento del paginador -->
 				<nav th:replace="components/paginator-nav :: paginator"></nav>
+			</div>
 		</div>
-	</div>
 	</div>
 	<!-- Footer -->
 	<footer th:replace="layout/layout :: footer"></footer>
