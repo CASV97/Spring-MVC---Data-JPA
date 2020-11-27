@@ -1,5 +1,6 @@
 package com.bolsadeideas.springboot.app.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -45,6 +46,8 @@ public class ClientController {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
+	private final static String UPLOADS_FOLDER = "uploads";
+
 	/**
 	 * Esta Url es la misma que teníamos antes solo que agrega un parámetro que va a
 	 * tener una extension ':.+', Esta exprecion regular permite que Spring no borre
@@ -59,7 +62,7 @@ public class ClientController {
 	 */
 	@GetMapping("/upload/{filename:.+}")
 	public ResponseEntity<Resource> showPhoto(@PathVariable String filename) {
-		Path photoPath = Paths.get("uploads").resolve(filename).toAbsolutePath();
+		Path photoPath = Paths.get(UPLOADS_FOLDER).resolve(filename).toAbsolutePath();
 		log.info("photoPath: " + photoPath);
 		Resource resource = null;
 		try {
@@ -149,11 +152,20 @@ public class ClientController {
 			return "form";
 		}
 		if (!photoFile.isEmpty()) {
+			if (client.getId() != null && client.getId() > 0 && client.getPhoto() != null
+					&& client.getPhoto().length() > 0) {
+				Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(client.getPhoto()).toAbsolutePath();
+				File file = rootPath.toFile();
+				if (file.exists() && file.canRead()) {
+					file.delete();
+
+				}
+			}
 			// Para evitar tener archivos con el mismo nombre y que no se reemplazen
 			String uniqueFileName = UUID.randomUUID().toString() + "_" + photoFile.getOriginalFilename();
 			// para que el directorio se encuentre en la raiz del proyecto y se va a llamar
 			// uploads
-			Path rootPath = Paths.get("uploads").resolve(uniqueFileName);
+			Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(uniqueFileName);
 			// para obtener la ruta completa del proyecto usamos
 			Path rootAbsolutPath = rootPath.toAbsolutePath();
 			log.info("rootPath: " + rootPath);
@@ -206,8 +218,18 @@ public class ClientController {
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if (id > 0) {
+			Client client = clientService.findOne(id);
 			clientService.delete(id);
 			flash.addFlashAttribute("success", "client removed successfully");
+			Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(client.getPhoto()).toAbsolutePath();
+			File file = rootPath.toFile();
+			if (file.exists() && file.canRead()) {
+				if (file.delete()) {
+					flash.addFlashAttribute("info", "Photo " + client.getPhoto() + " removed successfully!");
+				}
+
+			}
+
 		}
 		return "redirect:/list";
 	}
