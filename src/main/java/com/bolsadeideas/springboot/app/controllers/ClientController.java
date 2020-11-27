@@ -35,6 +35,20 @@ public class ClientController {
 	@Autowired
 	private IClientService clientService;
 
+	/** Ver el detalle y la foto del cliente */
+	@GetMapping("/show/{id}")
+	public String showClientDetail(@PathVariable(name = "id") Long id, Map<String, Object> model,
+			RedirectAttributes flash) {
+		Client client = clientService.findOne(id);
+		if (client == null) {
+			flash.addFlashAttribute("error", "Client id doesn't exist in database");
+			return "redirect:/list";
+		}
+		model.put("client", client);
+		model.put("title", "Client Detail");
+		return "show";
+	}
+
 	/**
 	 * Despues de modificar el repositorio por PagingAndSortingRepository para
 	 * paginar los resultados consulta e implementar el nuevo método que hace uso
