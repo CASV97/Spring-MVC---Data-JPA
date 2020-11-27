@@ -112,8 +112,7 @@ public class ClientController {
 		 * del archivo para poder escribir o mover la imagen es ese directorio
 		 */
 		if (!photoFile.isEmpty()) {
-			Path uploadsResourcesPath = Paths.get("src//main//resources//static/uploads");
-			String rootPath = uploadsResourcesPath.toFile().getAbsolutePath();
+			String rootPath = "D://Captures//springUploads";
 			// obteniendo los bytes de la imagen
 			try {
 				byte[] bytes = photoFile.getBytes();
