@@ -1,17 +1,25 @@
 package com.bolsadeideas.springboot.app.controllers;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +42,39 @@ import com.bolsadeideas.springboot.app.util.paginator.PageRender;
 public class ClientController {
 	@Autowired
 	private IClientService clientService;
+
+	private final Logger log = LoggerFactory.getLogger(getClass());
+
+	/**
+	 * Esta Url es la misma que teníamos antes solo que agrega un parámetro que va a
+	 * tener una extension ':.+', Esta exprecion regular permite que Spring no borre
+	 * o no trunque la extensión del archivo, ya que cuando detecta que la url
+	 * termina en '.ext' la va a truncar cuando se envíe un parámetro para poder
+	 * pasar solamente el valor del el nombre del parámetro pero sin la extension y
+	 * es importante la extensión que poder encontrar la imagen*
+	 * 
+	 * @param filename
+	 * @return {@link ResponseEntity} vamos a retornar un recurso o imagen a la
+	 *         respuesta http
+	 */
+	@GetMapping("/upload/{filename:.+}")
+	public ResponseEntity<Resource> showPhoto(@PathVariable String filename) {
+		Path photoPath = Paths.get("uploads").resolve(filename).toAbsolutePath();
+		log.info("photoPath: " + photoPath);
+		Resource resource = null;
+		try {
+			resource = new UrlResource(photoPath.toUri());
+			if (!resource.exists() || !resource.isReadable()) {
+				throw new RuntimeException("Error: Resource cannot be loaded: " + photoPath.toString());
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+	}
 
 	/** Ver el detalle y la foto del cliente */
 	@GetMapping("/show/{id}")
@@ -107,22 +148,22 @@ public class ClientController {
 			 */
 			return "form";
 		}
-		/*
-		 * verificando que el fichero no esté vacio para para poder concatenar el nombre
-		 * del archivo para poder escribir o mover la imagen es ese directorio
-		 */
 		if (!photoFile.isEmpty()) {
-			String rootPath = "D://Captures//springUploads";
-			// obteniendo los bytes de la imagen
+			// Para evitar tener archivos con el mismo nombre y que no se reemplazen
+			String uniqueFileName = UUID.randomUUID().toString() + "_" + photoFile.getOriginalFilename();
+			// para que el directorio se encuentre en la raiz del proyecto y se va a llamar
+			// uploads
+			Path rootPath = Paths.get("uploads").resolve(uniqueFileName);
+			// para obtener la ruta completa del proyecto usamos
+			Path rootAbsolutPath = rootPath.toAbsolutePath();
+			log.info("rootPath: " + rootPath);
+			log.info("rootAbsolutPath: " + rootAbsolutPath);
 			try {
-				byte[] bytes = photoFile.getBytes();
-				// lo siguiente es tener la ruta final con el nombre del archivo
-				Path completePath = Paths.get(rootPath + "//" + photoFile.getOriginalFilename());
-				// finalmente con escribimos la imagen en el directorio upload
-				Files.write(completePath, bytes);
-				flash.addFlashAttribute("info", "Has uploaded successufully '" + photoFile.getOriginalFilename() + "'");
+				// en vez de usar bytes podemos usar el método copy
+				Files.copy(photoFile.getInputStream(), rootAbsolutPath);
+				flash.addFlashAttribute("info", "Has uploaded successufully '" + uniqueFileName + "'");
 
-				client.setPhoto(photoFile.getOriginalFilename());
+				client.setPhoto(uniqueFileName);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
