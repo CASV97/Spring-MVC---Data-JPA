@@ -1,21 +1,13 @@
 package com.bolsadeideas.springboot.app.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.entity.Client;
-import com.bolsadeideas.springboot.app.service.IClientService;
+import com.bolsadeideas.springboot.app.models.service.IClientService;
+import com.bolsadeideas.springboot.app.models.service.IUploadFileService;
 import com.bolsadeideas.springboot.app.util.paginator.PageRender;
 
 @Controller
@@ -44,9 +37,8 @@ public class ClientController {
 	@Autowired
 	private IClientService clientService;
 
-	private final Logger log = LoggerFactory.getLogger(getClass());
-
-	private final static String UPLOADS_FOLDER = "uploads";
+	@Autowired
+	private IUploadFileService uploadFileService;
 
 	/**
 	 * Esta Url es la misma que teníamos antes solo que agrega un parámetro que va a
@@ -60,18 +52,12 @@ public class ClientController {
 	 * @return {@link ResponseEntity} vamos a retornar un recurso o imagen a la
 	 *         respuesta http
 	 */
-	@GetMapping("/upload/{filename:.+}")
+	@GetMapping("/uploads/{filename:.+}")
 	public ResponseEntity<Resource> showPhoto(@PathVariable String filename) {
-		Path photoPath = Paths.get(UPLOADS_FOLDER).resolve(filename).toAbsolutePath();
-		log.info("photoPath: " + photoPath);
 		Resource resource = null;
 		try {
-			resource = new UrlResource(photoPath.toUri());
-			if (!resource.exists() || !resource.isReadable()) {
-				throw new RuntimeException("Error: Resource cannot be loaded: " + photoPath.toString());
-			}
+			resource = uploadFileService.load(filename);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return ResponseEntity.ok()
@@ -154,32 +140,19 @@ public class ClientController {
 		if (!photoFile.isEmpty()) {
 			if (client.getId() != null && client.getId() > 0 && client.getPhoto() != null
 					&& client.getPhoto().length() > 0) {
-				Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(client.getPhoto()).toAbsolutePath();
-				File file = rootPath.toFile();
-				if (file.exists() && file.canRead()) {
-					file.delete();
-
-				}
+				uploadFileService.delete(client.getPhoto());
 			}
-			// Para evitar tener archivos con el mismo nombre y que no se reemplazen
-			String uniqueFileName = UUID.randomUUID().toString() + "_" + photoFile.getOriginalFilename();
-			// para que el directorio se encuentre en la raiz del proyecto y se va a llamar
-			// uploads
-			Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(uniqueFileName);
-			// para obtener la ruta completa del proyecto usamos
-			Path rootAbsolutPath = rootPath.toAbsolutePath();
-			log.info("rootPath: " + rootPath);
-			log.info("rootAbsolutPath: " + rootAbsolutPath);
+			String uniqueFileName = null;
 			try {
-				// en vez de usar bytes podemos usar el método copy
-				Files.copy(photoFile.getInputStream(), rootAbsolutPath);
-				flash.addFlashAttribute("info", "Has uploaded successufully '" + uniqueFileName + "'");
-
-				client.setPhoto(uniqueFileName);
+				uniqueFileName = uploadFileService.copy(photoFile);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+			flash.addFlashAttribute("info", "Has uploaded successufully '" + uniqueFileName + "'");
+
+			client.setPhoto(uniqueFileName);
+
 		}
 
 		// tendremos que validar el id de cliente para saber si hace un insert o un
@@ -221,13 +194,9 @@ public class ClientController {
 			Client client = clientService.findOne(id);
 			clientService.delete(id);
 			flash.addFlashAttribute("success", "client removed successfully");
-			Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(client.getPhoto()).toAbsolutePath();
-			File file = rootPath.toFile();
-			if (file.exists() && file.canRead()) {
-				if (file.delete()) {
-					flash.addFlashAttribute("info", "Photo " + client.getPhoto() + " removed successfully!");
-				}
 
+			if (uploadFileService.delete(client.getPhoto())) {
+				flash.addFlashAttribute("info", "Photo " + client.getPhoto() + " removed successfully!");
 			}
 
 		}
