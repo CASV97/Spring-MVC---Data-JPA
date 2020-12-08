@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>9</zoom_level>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>198</x>
+      <y>306</y>
+      <w>81</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+//Un cliente tiene muchas facturas
+//Una factura tiene un solo cliente
+//el rombo significa agregación</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>405</x>
+      <y>513</y>
+      <w>99</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+//Una línea esta asociado  a un producto, un producto no es necesario que contenga una línea
+//La diferencia de la clecha continua especifica que es parte de la clase</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>351</y>
+      <w>27</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+//Composición es muy similar al de agregacion, pero es algo 
+//semántico por ejemplo que los hijos no pueden existir
+//si no existe el padre </panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>45</x>
+      <y>243</y>
+      <w>162</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>Client
+--
+-id: Integer
+-firstName: String
+-lastName: String
+-email: String
+-createAt: java.util.Date
+-invoices: List&lt;Invoice&gt;
+--
+//#Operation(i: int): int
+//+GettersAndSetters()/
+//--
+//Responsibilities
+//-- Resp1
+//-- Resp2
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>261</x>
+      <y>243</y>
+      <w>162</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>Invoice
+--
+-id: Integer
+-description: String
+-observation: String
+-date: java.util.Date
+--
++calculateTotal(): Long
+//+GettersAndSetters()/
+//--
+//Responsibilities
+//-- Resp1
+//-- Resp2
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>252</x>
+      <y>468</y>
+      <w>162</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>InvoiceLine
+--
+-quantity: Integer
+--
++calculateAmount(): Long
+//+GettersAndSetters()/
+//--
+//Responsibilities
+//-- Resp1
+//-- Resp2
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>486</x>
+      <y>468</y>
+      <w>162</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>Product
+--
+-id: Integer
+-nameProduct: String
+-price: Long
+--
++calculateAmount(): Long
+//+GettersAndSetters()/
+//--
+//Responsibilities
+//-- Resp1
+//-- Resp2
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
