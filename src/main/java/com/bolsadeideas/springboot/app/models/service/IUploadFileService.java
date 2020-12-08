@@ -29,4 +29,12 @@ public interface IUploadFileService {
 	 */
 	public boolean delete(String filename);
 
+	/**
+	 * Borramos todo el directorio uploads con todas las imagenes de forma recursiva
+	 */
+	public void deleteAll();
+
+	/** Creamos nuevamente el directorio uploads */
+	public void init() throws IOException;
+
 }
