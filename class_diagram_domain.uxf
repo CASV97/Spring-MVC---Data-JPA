@@ -81,7 +81,7 @@ bg=pink</panel_attributes>
 -id: Integer
 -description: String
 -observation: String
--date: java.util.Date
+-createAt: java.util.Date
 --
 +calculateTotal(): Long
 //+GettersAndSetters()/

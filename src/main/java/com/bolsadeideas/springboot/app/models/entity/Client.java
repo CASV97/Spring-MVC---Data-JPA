@@ -1,13 +1,18 @@
 package com.bolsadeideas.springboot.app.models.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -44,10 +49,19 @@ public class Client implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date createAt;
-	
-	//atributo para la imagen de fichero
-	
+
+	// atributo para la imagen de fichero
+
 	private String photo;
+
+	// un cliente puede tener varias facturas
+	// mappedBy seria el atributo de la otra clase de la relacion, es bidireccional
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")
+	private List<Invoice> invoices;
+
+	public Client() {
+		invoices = new ArrayList<Invoice>();
+	}
 
 	/**
 	 * creamos método prepersist es decir antes de que se guarde en la base de datos
@@ -111,6 +125,24 @@ public class Client implements Serializable {
 
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+
+	public List<Invoice> getInvoices() {
+		return invoices;
+	}
+
+	public void setInvoices(List<Invoice> invoices) {
+		this.invoices = invoices;
+	}
+
+	/**
+	 * De manera opcional pero recomendada agregamos el método addInvoice, la idea
+	 * de este método es agregar factura por factura en la clase Client, tal como si
+	 * fuera un objeto de coleccion, es parecida al setInvoices pero en ves de
+	 * guardar una lista, guarda las facturas una por una
+	 */
+	public void addInvoice(Invoice invoice) {
+		invoices.add(invoice);
 	}
 
 }
