@@ -51,9 +51,10 @@ public class Invoice implements Serializable {
 	 * (invoice) con (invoice_items) lo indicamos con la
 	 * anotación @JoinColumn(nombre_de_la_columna), es decir que vamos a tener un
 	 * campo o llave forana "invoice_id" en la tabla "invoice_items"(en la tabla de
-	 * la relación)
+	 * la relación), orphanRemoval es opcional, para eliminar items huérfanos que no
+	 * están asociados a ninguna factura
 	 */
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "invoice_id")
 	List<InvoiceLineItem> items;
 

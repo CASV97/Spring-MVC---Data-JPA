@@ -33,3 +33,14 @@ INSERT INTO products(name,price,create_at) VALUES('Sony Notebook z110',430,NOW()
 INSERT INTO products(name,price,create_at) VALUES('Hewlerr packard Multifuncional D220',456,NOW());
 INSERT INTO products(name,price,create_at) VALUES('Toshiba notebook asd1234', 330,NOW());
 INSERT INTO products(name,price,create_at) VALUES('Mica Comoda 434 cajones', 4561,NOW());
+
+/*Eg Invoices*/
+INSERT INTO invoices(description,observation,client_id,create_at) VALUES('Factura Equipos de oficina',null,1,NOW());
+INSERT INTO invoice_items(quantity,invoice_id,product_id) VALUES(1,1,1);
+INSERT INTO invoice_items(quantity,invoice_id,product_id) VALUES(2,1,3);
+INSERT INTO invoice_items(quantity,invoice_id,product_id) VALUES(3,1,4);
+INSERT INTO invoice_items(quantity,invoice_id,product_id) VALUES(4,1,2);
+INSERT INTO invoice_items(quantity,invoice_id,product_id) VALUES(5,1,5);
+
+INSERT INTO invoices(description,observation,client_id,create_at) VALUES('Factura nueva ','observación alguna',1,NOW());
+INSERT INTO invoice_items(quantity,invoice_id,product_id) VALUES(3,2,6);

@@ -1,5 +1,12 @@
-{"properties": [{
-  "name": "company.name",
-  "type": "java.lang.String",
-  "description": "A description for 'company.name'"
-}]}
+{"properties": [
+  {
+    "name": "company.name",
+    "type": "java.lang.String",
+    "description": "A description for 'company.name'"
+  },
+  {
+    "name": "invoices.not.assigned",
+    "type": "java.lang.String",
+    "description": "A description for 'invoices.not.assigned'"
+  }
+]}

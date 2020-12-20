@@ -54,9 +54,12 @@ public class Client implements Serializable {
 
 	private String photo;
 
-	// un cliente puede tener varias facturas
-	// mappedBy seria el atributo de la otra clase de la relacion, es bidireccional
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")
+	/*
+	 * un cliente puede tener varias facturas mappedBy seria el atributo de la otra
+	 * clase de la relacion, es bidireccional orphanRemoval es opcional, sirve para
+	 * eliminar registros huérfanos que no están asociados a ningún cliente
+	 */
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client", orphanRemoval = true)
 	private List<Invoice> invoices;
 
 	public Client() {
