@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
-  <zoom_level>9</zoom_level>
+  <zoom_level>6</zoom_level>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>198</x>
-      <y>306</y>
-      <w>81</w>
-      <h>27</h>
+      <x>156</x>
+      <y>288</y>
+      <w>54</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 //Un cliente tiene muchas facturas
@@ -18,10 +18,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>405</x>
-      <y>513</y>
-      <w>99</w>
-      <h>27</h>
+      <x>294</x>
+      <y>426</y>
+      <w>66</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 //Una línea esta asociado  a un producto, un producto no es necesario que contenga una línea
@@ -31,10 +31,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>324</x>
-      <y>351</y>
-      <w>27</w>
-      <h>135</h>
+      <x>240</x>
+      <y>318</y>
+      <w>18</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 //Composición es muy similar al de agregacion, pero es algo 
@@ -45,10 +45,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>45</x>
-      <y>243</y>
-      <w>162</w>
-      <h>144</h>
+      <x>54</x>
+      <y>246</y>
+      <w>108</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>Client
 --
@@ -71,10 +71,10 @@ bg=pink</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>261</x>
-      <y>243</y>
-      <w>162</w>
-      <h>117</h>
+      <x>198</x>
+      <y>246</y>
+      <w>108</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>Invoice
 --
@@ -95,12 +95,12 @@ bg=pink</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>252</x>
-      <y>468</y>
-      <w>162</w>
-      <h>81</h>
+      <x>192</x>
+      <y>396</y>
+      <w>108</w>
+      <h>54</h>
     </coordinates>
-    <panel_attributes>InvoiceLine
+    <panel_attributes>InvoinceLineItem
 --
 -quantity: Integer
 --
@@ -116,10 +116,10 @@ bg=pink</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>486</x>
-      <y>468</y>
-      <w>162</w>
-      <h>99</h>
+      <x>348</x>
+      <y>396</y>
+      <w>108</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>Product
 --
