@@ -7,7 +7,13 @@
 		<div class="card bg-ligth">
 			<div class="card-header" th:text="${title}"></div>
 			<div class="card-body">
-				<img th:if="${#strings.length(client.photo) > 0}"
+				<h4 class="card-title">
+					<!-- Enlace al controlador donde recibe un cliente por paámetro y
+							 muestra el formualrio para crear factura-->
+					<a class="btn btn-primary btn-xs"
+						th:href="@{'/invoice/form/' + ${client.id}}"
+						th:text="'New Invoice'"></a>
+				</h4> <img th:if="${#strings.length(client.photo) > 0}"
 					class="img-thumbnail rounded float-left" style="max-width: 25%"
 					th:src="@{'/uploads/' + ${client.photo}}"
 					th:alt="${client.firstName} + ' ' + ${client.lastName}">
@@ -16,11 +22,10 @@
 					<li class="list-group-item" th:text="${client.lastName}"></li>
 					<li class="list-group-item" th:text="${client.email}"></li>
 					<li class="list-group-item" th:text="${client.createAt}"></li>
-				</ul>
-				<!-- Cuando está vacía mostramos mensaje y cuando no mostramos la tabla -->
+				</ul> <!-- Cuando está vacía mostramos mensaje y cuando no mostramos la tabla -->
 				<div class="alert alert-info my-a"
-					th:if="${#lists.isEmpty(client.invoices)}"
-					th:text="${@environment.getProperty('invoices.not.assigned')} + ' ' + ${client.firstName} + ' ' + ${client.lastName}"></div>
+				th:if="${#lists.isEmpty(client.invoices)}"
+				th:text="${@environment.getProperty('invoices.not.assigned')} + ' ' + ${client.firstName} + ' ' + ${client.lastName}"></div>
 				<table class="table table-bordered table-striped my-4"
 					th:if="${not #lists.isEmpty(client.invoices)}">
 					<thead class="thead-dark">
@@ -42,8 +47,8 @@
 
 					</tbody>
 				</table>
-			</div>
 		</div>
+	</div>
 	</div>
 	<footer th:replace="layout/layout :: footer"></footer>
 </body>

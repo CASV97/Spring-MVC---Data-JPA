@@ -21,6 +21,7 @@
 							<th>Last Name</th>
 							<th>Email</th>
 							<th>Date</th>
+							<th>Create Invoice</th>
 							<th>Edit</th>
 							<th>Delete</th>
 						</tr>
@@ -36,6 +37,13 @@
 							<td th:text="${client.email}"></td>
 							<td th:text="${client.createAt}"></td>
 							<td>
+								<!-- Enlace al controlador donde recibe un cliente por paámetro y
+							 muestra el formualrio para crear factura-->
+								<a class="btn btn-success btn-xs"
+									th:href="@{'/invoice/form/' + ${client.id}}"
+									th:text="'New Invoice'"></a>
+							</td>
+							<td>
 								<a class="btn btn-primary btn-xs"
 									th:href="@{/form/} + ${client.id}" th:text="Edit"></a>
 							</td>
@@ -46,11 +54,10 @@
 							</td>
 						</tr>
 					</tbody>
-				</table>
-				<!-- Agregando el fragmento del paginador -->
+				</table> <!-- Agregando el fragmento del paginador -->
 				<nav th:replace="components/paginator-nav :: paginator"></nav>
-			</div>
 		</div>
+	</div>
 	</div>
 	<!-- Footer -->
 	<footer th:replace="layout/layout :: footer"></footer>
