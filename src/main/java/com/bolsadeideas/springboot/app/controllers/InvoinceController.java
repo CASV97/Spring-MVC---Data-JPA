@@ -1,16 +1,20 @@
 package com.bolsadeideas.springboot.app.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.entity.Client;
 import com.bolsadeideas.springboot.app.models.entity.Invoice;
+import com.bolsadeideas.springboot.app.models.entity.Product;
 import com.bolsadeideas.springboot.app.models.service.IClientService;
 
 @Controller
@@ -40,6 +44,18 @@ public class InvoinceController {
 		model.addAttribute("title", "Create Invoice");
 
 		return "invoice/form";
+	}
+
+	/**
+	 * Tiene que ser el mismo mapping que la petición Ajax, ademas indicamos que va
+	 * a tener una salida del tipo application/json por que produce una resppuesta
+	 * del tipo Json, y por último el método @ResponseBody, entonces esta anotación
+	 * lo que hace es suprimir el cargar una vista de thymeleaf, en vez de eso va a
+	 * tomar el resultado convertido a JSON
+	 */
+	@GetMapping(value = "/load-products/{term}", produces = { "application/json" })
+	public @ResponseBody List<Product> loadProducts(@PathVariable String term) {
+		return clientService.findByName(term);
 	}
 
 }

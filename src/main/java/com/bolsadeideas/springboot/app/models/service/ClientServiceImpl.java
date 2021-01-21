@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bolsadeideas.springboot.app.models.dao.IClientDao;
+import com.bolsadeideas.springboot.app.models.dao.IProductDao;
 import com.bolsadeideas.springboot.app.models.entity.Client;
+import com.bolsadeideas.springboot.app.models.entity.Product;
 
 /**
  * Una clase service esta basado en el patron de diseño FASCADE o fachada,
@@ -28,6 +30,9 @@ import com.bolsadeideas.springboot.app.models.entity.Client;
 public class ClientServiceImpl implements IClientService {
 	@Autowired
 	private IClientDao clientDao;
+
+	@Autowired
+	private IProductDao productDao;
 
 	@Transactional(readOnly = true)
 	@Override
@@ -62,6 +67,13 @@ public class ClientServiceImpl implements IClientService {
 	@Override
 	public Page<Client> findAll(Pageable pageable) {
 		return clientDao.findAll(pageable);
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<Product> findByName(String term) {
+		// TODO Auto-generated method stub
+		return productDao.findByName(term);
 	}
 
 }

@@ -23,22 +23,22 @@
 						  vayamos escribiendo en el input, este valor se pueba dentro del 
 						  parámetro term dentro de request*/
 						url : "/invoice/load-products/" + request.term,
-						dataType: "json",
+						dataType : "json",
 						/*data es un arreglo y podemos utilizar para enviar otros parámetros 
 						em el request*/
-						data:{
-							term: request.term
+						data : {
+							term : request.term
 						},
 						/*Esta funcion success es muy importante ya que se encarga de recibir los datos
 						  en formato JSON y lo pasamos al autocomplete usando en response 
 						  y dentro de response vamos a utilizar el método map, que se encarga de realizar 
 						  un proceso por cada elemento del arreglo */
-						success: function(data){
-							response($.map(data, fucntion(item){
-								return{
-									value: item.id,
-									label: item.name,
-									precio: item.price, 
+						success : function(data) {
+							response($.map(data, function(item) {
+								return {
+									value : item.id,
+									label : item.name,
+									precio : item.price,
 								};
 							}));
 						},
@@ -48,13 +48,12 @@
 				/*Este metodo nos permite realizar cualquier tipo de tarea una vez que seleccionamos 
 				  un elemento del autocomplete, por ejemplo para tomar ese producto a una linea de la
 				  factura*/
-				select:function(event,u i){
-					$("#search_product")~.val(ui.item.label);
+				select : function(event, ui) {
+					$("#search_product").val(ui.item.label);
 					return false;
 				}
 			});
-		}
-		);
+		});
 	</script>
 </body>
 </html>
