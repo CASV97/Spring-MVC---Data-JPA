@@ -72,7 +72,6 @@ public class ClientServiceImpl implements IClientService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<Product> findByName(String term) {
-		// TODO Auto-generated method stub
 		return productDao.findByName(term);
 	}
 

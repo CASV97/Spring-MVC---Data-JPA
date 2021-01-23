@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- Le damos una case de bootstrap 'displayNone , para que no se muestre, por lo tanto es una
+	plantilla que queda  oculta, la idea es que a travez de JQUERY con js leamos esta plantilla 
+	y vamos a reemplazar los valores-->
+	<table th:fragment="itemInvoice" class="d-none">
+		<tbody id="itemInvoiceTemplate">
+
+			<!-- Este valor del ID se va a reemplazar con el valor real del Id del producto, basicamente
+			para que después a travez de JQUERY tengamos la posibilidad de eliminar la línea, los 
+			valores entre {} y con mayúsculas se van a reemlplazar con el valor real del producto que
+			obtenemos a travez del autocomplete, cuando seleccionamos un producto -->
+			<tr id="row_{ID}">
+				<td class="d-none">
+					<!-- Va con [], ya que es un arreglo, debido a que una factura puede tener varias
+					líneas   -->
+					<input type="hidden" value="{ID}" name="item_id[]">
+				</td>
+				<td>{NAME}</td>
+				<td>{PRICE}</td>
+				<!-- este tambien va a ser un arreglo de las cantidades de cada  línea   -->
+				<td>
+					<input type="number" value="1" name="quantity[]" id="cantidad_{ID}"
+						class="form-control col-sm-4">
+			</tr>
+		</tbody>
+
+	</table>
+
+</body>
+</html>
