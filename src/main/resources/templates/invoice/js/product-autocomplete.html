@@ -49,7 +49,18 @@
 				  un elemento del autocomplete, por ejemplo para tomar ese producto a una linea de la
 				  factura*/
 				select : function(event, ui) {
-					$("#search_product").val(ui.item.label);
+					//$("#search_product").val(ui.item.label);
+					/*Obteniendo el contenido de la plantilla items-template e invocamos el método html
+					que obtiene el contenido html de ese elemento a travez de el ID */
+					var line = $("#itemInvoiceTemplate").html();
+					/*Luego vamos a reemplazar el ID, NAME, PRICE por el valor*/
+					line = line.replace(/{ID}/g, ui.item.value);
+					line = line.replace(/{NAME}/g, ui.item.label);
+					line = line.replace(/{PRICE}/g, ui.item.price);
+					/*Agregamos esta línea a la tabla loadProductItem haciendo referencia a la tabla,
+					pero al tbody*/
+					$("#loadProductItem tbody").append(line);
+
 					return false;
 				}
 			});
