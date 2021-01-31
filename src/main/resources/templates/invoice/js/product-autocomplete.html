@@ -4,67 +4,81 @@
 <body>
 	<script type="text/javascript" th:fragment="javascript">
 		//primero comprobamos que el documento esté cargardo
-		$(document).ready(function() {
-			/*aquí vamos a implementar el autocomplete,
-			hacemos referencia al id y utilizamos el método autocomplete,
-			que recibe un objeto {} que contiene dos métodos importantes,
-			el método source, que se encarga de realizar la peticion AJAX,
-			y el método select que se encarga de procesar el resultado y 
-			hacer algo con esos datos*/
-			$("#search_product").autocomplete({
-				source : function(request, response) {
-					/*aquí implementamos el metodo AJAX, y pasamos un objeto con todos los parámetros  y
-					  y con la implementación del método succes para manejar la respuesta*/
-					$.ajax({
-						/*este sería el mapping URL hacia un método handler del controlador,
-						  se encarga de manejar la peticion AJAX y realiza la consulta para 
-						  retornar los procutos encontrados, le tenemos que pasar un parámetro
-						  a la ruta, un path variable, este parámetro contiene el texto que
-						  vayamos escribiendo en el input, este valor se pueba dentro del 
-						  parámetro term dentro de request*/
-						url : "/invoice/load-products/" + request.term,
-						dataType : "json",
-						/*data es un arreglo y podemos utilizar para enviar otros parámetros 
-						em el request*/
-						data : {
-							term : request.term
+		$(document).ready(
+			function() {
+				/*aquí vamos a implementar el autocomplete,
+				hacemos referencia al id y utilizamos el método autocomplete,
+				que recibe un objeto {} que contiene dos métodos importantes,
+				el método source, que se encarga de realizar la peticion AJAX,
+				y el método select que se encarga de procesar el resultado y 
+				hacer algo con esos datos*/
+				$("#search_product").autocomplete(
+					{
+						source : function(request, response) {
+							/*aquí implementamos el metodo AJAX, y pasamos un objeto con todos los parámetros  y
+							  y con la implementación del método succes para manejar la respuesta*/
+							$.ajax({
+								/*este sería el mapping URL hacia un método handler del controlador,
+								  se encarga de manejar la peticion AJAX y realiza la consulta para 
+								  retornar los procutos encontrados, le tenemos que pasar un parámetro
+								  a la ruta, un path variable, este parámetro contiene el texto que
+								  vayamos escribiendo en el input, este valor se pueba dentro del 
+								  parámetro term dentro de request*/
+								url : "/invoice/load-products/" + request.term,
+								dataType : "json",
+								/*data es un arreglo y podemos utilizar para enviar otros parámetros 
+								em el request*/
+								data : {
+									term : request.term
+								},
+								/*Esta funcion success es muy importante ya que se encarga de recibir los datos
+								  en formato JSON y lo pasamos al autocomplete usando en response 
+								  y dentro de response vamos a utilizar el método map, que se encarga de realizar 
+								  un proceso por cada elemento del arreglo */
+								success : function(data) {
+									response($.map(data, function(item) {
+										return {
+											value : item.id,
+											label : item.name,
+											price : item.price,
+										};
+									}));
+								},
+							});
+
 						},
-						/*Esta funcion success es muy importante ya que se encarga de recibir los datos
-						  en formato JSON y lo pasamos al autocomplete usando en response 
-						  y dentro de response vamos a utilizar el método map, que se encarga de realizar 
-						  un proceso por cada elemento del arreglo */
-						success : function(data) {
-							response($.map(data, function(item) {
-								return {
-									value : item.id,
-									label : item.name,
-									precio : item.price,
-								};
-							}));
-						},
+						/*Este metodo nos permite realizar cualquier tipo de tarea una vez que seleccionamos 
+						  un elemento del autocomplete, por ejemplo para tomar ese producto a una linea de la
+						  factura*/
+						select : function(event, ui) {
+							//$("#search_product").val(ui.item.label);
+							/*Obteniendo el contenido de la plantilla items-template e invocamos el método html
+							que obtiene el contenido html de ese elemento a travez de el ID */
+							var line = $("#itemInvoiceTemplate").html();
+							/*Luego vamos a reemplazar el ID, NAME, PRICE por el valor*/
+							line = line.replace(/{ID}/g, ui.item.value);
+							line = line.replace(/{NAME}/g, ui.item.label);
+							line = line.replace(/{PRICE}/g, ui.item.price);
+							/*Agregamos esta línea a la tabla loadProductItem haciendo referencia a la tabla,
+							pero al tbody*/
+							
+							$("#loadItemProducts tbody").append(line);
+							itemsHelper.calculateAmount(ui.item.value, ui.item.price, 1);
+							return false;
+						}
 					});
-
-				},
-				/*Este metodo nos permite realizar cualquier tipo de tarea una vez que seleccionamos 
-				  un elemento del autocomplete, por ejemplo para tomar ese producto a una linea de la
-				  factura*/
-				select : function(event, ui) {
-					//$("#search_product").val(ui.item.label);
-					/*Obteniendo el contenido de la plantilla items-template e invocamos el método html
-					que obtiene el contenido html de ese elemento a travez de el ID */
-					var line = $("#itemInvoiceTemplate").html();
-					/*Luego vamos a reemplazar el ID, NAME, PRICE por el valor*/
-					line = line.replace(/{ID}/g, ui.item.value);
-					line = line.replace(/{NAME}/g, ui.item.label);
-					line = line.replace(/{PRICE}/g, ui.item.price);
-					/*Agregamos esta línea a la tabla loadProductItem haciendo referencia a la tabla,
-					pero al tbody*/
-					$("#loadProductItem tbody").append(line);
-
-					return false;
-				}
 			});
-		});
+
+		/* Función para calcular el importe, declaramos un objeto javascript, que va a ser un
+		objeto con unos métodos de ayuda para calcular el importe, eliminar línea de factura, 
+		incrementar la cantidad cada vez que se aumente un producto en la línea, etc*/
+		var itemsHelper = {
+			calculateAmount: function(id, price, quantity) {
+				$("#total_amount_" + id).html(parseFloat(price) * parseInt(quantity));
+
+			}
+
+		}
 	</script>
 </body>
 </html>

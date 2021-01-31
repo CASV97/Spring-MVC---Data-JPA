@@ -55,6 +55,7 @@ public class InvoinceController {
 	 */
 	@GetMapping(value = "/load-products/{term}", produces = { "application/json" })
 	public @ResponseBody List<Product> loadProducts(@PathVariable String term) {
+
 		return clientService.findByName(term);
 	}
 

@@ -9,12 +9,13 @@
 	plantilla que queda  oculta, la idea es que a travez de JQUERY con js leamos esta plantilla 
 	y vamos a reemplazar los valores-->
 	<table th:fragment="itemInvoice" class="d-none">
-		<tbody id="itemInvoiceTemplate">
-
-			<!-- Este valor del ID se va a reemplazar con el valor real del Id del producto, basicamente
+		<!-- Este valor del ID se va a reemplazar con el valor real del Id del producto, basicamente
 			para que después a travez de JQUERY tengamos la posibilidad de eliminar la línea, los 
 			valores entre {} y con mayúsculas se van a reemlplazar con el valor real del producto que
 			obtenemos a travez del autocomplete, cuando seleccionamos un producto -->
+		<tbody id="itemInvoiceTemplate">
+
+
 			<tr id="row_{ID}">
 				<td class="d-none">
 					<!-- Va con [], ya que es un arreglo, debido a que una factura puede tener varias
@@ -25,8 +26,13 @@
 				<td>{PRICE}</td>
 				<!-- este tambien va a ser un arreglo de las cantidades de cada  línea   -->
 				<td>
-					<input type="number" value="1" name="quantity[]" id="cantidad_{ID}"
-						class="form-control col-sm-4">
+					<input type="number" value="1" name="quantity[]" id="quantity_{ID}"
+						class="form-control col-sm-4"
+						onchange="itemsHelper.calculateAmount({ID},{PRICE}, this.value);" />
+				</td>
+				<td>
+					<span id="total_amount_{ID}">0</span>
+				</td>
 			</tr>
 		</tbody>
 

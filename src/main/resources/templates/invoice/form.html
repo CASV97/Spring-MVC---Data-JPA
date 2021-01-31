@@ -5,7 +5,7 @@
 <body>
 	<!-- menú de navegación de bootstrap  -->
 	<header th:replace="layout/layout :: header"></header>
-	<div class="Container py-4">
+	<div class="container py-4">
 		<div class="card bg-ligth">
 			<div class="card-header" th:text="${title}"></div>
 			<div class="card-body">
@@ -59,13 +59,14 @@
 					  referencia a esta tabla con el id="loadProductItem" y le vamos a agregar la fila
 					  el <tr> dentro del <tbody> 
 					   -->
-					<table id="loadProductItem"
+					<table id="loadItemProducts"
 						class="table table-sm table table-striped table-hover">
 						<thead>
 							<tr>
 								<th>Name</th>
 								<th>Price</th>
 								<th>Quantity</th>
+								<th>Total</th>
 							</tr>
 						</thead>
 						<tbody>
