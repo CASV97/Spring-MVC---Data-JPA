@@ -51,6 +51,13 @@
 						  un elemento del autocomplete, por ejemplo para tomar ese producto a una linea de la
 						  factura*/
 						select : function(event, ui) {
+							//para validad que el producto ya está agregado a la factura y asi incrementarlo
+							if (itemsHelper.hasProduct(ui.item.value)) {
+								itemsHelper.increaseQuantity(ui.item.value,
+									ui.item.price);
+								return false;
+							}
+
 							//$("#search_product").val(ui.item.label);
 							/*Obteniendo el contenido de la plantilla items-template e invocamos el método html
 							que obtiene el contenido html de ese elemento a travez de el ID */
@@ -61,9 +68,10 @@
 							line = line.replace(/{PRICE}/g, ui.item.price);
 							/*Agregamos esta línea a la tabla loadProductItem haciendo referencia a la tabla,
 							pero al tbody*/
-							
+
 							$("#loadItemProducts tbody").append(line);
-							itemsHelper.calculateAmount(ui.item.value, ui.item.price, 1);
+							itemsHelper.calculateAmount(ui.item.value,
+								ui.item.price, 1);
 							return false;
 						}
 					});
@@ -73,9 +81,32 @@
 		objeto con unos métodos de ayuda para calcular el importe, eliminar línea de factura, 
 		incrementar la cantidad cada vez que se aumente un producto en la línea, etc*/
 		var itemsHelper = {
-			calculateAmount: function(id, price, quantity) {
-				$("#total_amount_" + id).html(parseFloat(price) * parseInt(quantity));
+			calculateAmount : function(id, price, quantity) {
+				$("#total_amount_" + id).html(
+					parseFloat(price) * parseInt(quantity));
 
+			},
+			/*Funcion que se encarga de buscar linea por linea en el detalle de la factura si existe el ID
+			del producto realizamos un foreach de jquery*/
+			hasProduct : function(id) {
+				var result = false;
+				$('input[name="item_id[]"]').each(function() {
+					if (parseInt(id) == parseInt($(this).val())) {
+						result = true;
+					}
+				});
+				return result;
+
+			},
+			increaseQuantity : function(id, price) {
+				/** la cantidad la obtenemos a travez del id del elemento y hacemos una validacion con ? 
+					para comprobar que tiene un valor numerico*/
+				var quantity = $("#quantity_" + id).val() ? parseInt($(
+					"#quantity_" + id).val()) : 0;
+				//pasamos la cantidad incrementada
+				$("#quantity_" + id).val(++quantity);
+				//actualizamos el importe o total, asi cada vez que varie la cantidad tenemos que vilver a calcular el importe
+				this.calculateAmount(id, price, quantity);
 			}
 
 		}
