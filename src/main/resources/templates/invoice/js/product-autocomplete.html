@@ -107,6 +107,9 @@
 				$("#quantity_" + id).val(++quantity);
 				//actualizamos el importe o total, asi cada vez que varie la cantidad tenemos que vilver a calcular el importe
 				this.calculateAmount(id, price, quantity);
+			},
+			removeInvoiceLine : function(id){
+				 $("#row_"+id).remove();
 			}
 
 		}
