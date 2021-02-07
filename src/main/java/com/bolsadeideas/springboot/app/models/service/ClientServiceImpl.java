@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bolsadeideas.springboot.app.models.dao.IClientDao;
+import com.bolsadeideas.springboot.app.models.dao.IInvoiceDao;
 import com.bolsadeideas.springboot.app.models.dao.IProductDao;
 import com.bolsadeideas.springboot.app.models.entity.Client;
+import com.bolsadeideas.springboot.app.models.entity.Invoice;
 import com.bolsadeideas.springboot.app.models.entity.Product;
 
 /**
@@ -33,6 +35,9 @@ public class ClientServiceImpl implements IClientService {
 
 	@Autowired
 	private IProductDao productDao;
+
+	@Autowired
+	private IInvoiceDao invoiceDao;
 
 	@Transactional(readOnly = true)
 	@Override
@@ -73,6 +78,21 @@ public class ClientServiceImpl implements IClientService {
 	@Override
 	public List<Product> findByName(String term) {
 		return productDao.findByName(term);
+	}
+
+	@Override
+	@Transactional
+	public void saveIvoice(Invoice invoice) {
+
+		invoiceDao.save(invoice);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Product findProductById(Long id) {
+		// Recordando que cuando usamos Spring boot 2 o superior, este método retorna un
+		// Optional
+		return productDao.findById(id).orElseGet(null);
 	}
 
 }

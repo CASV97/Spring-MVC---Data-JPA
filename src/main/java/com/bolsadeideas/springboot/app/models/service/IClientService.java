@@ -25,4 +25,6 @@ public interface IClientService {
 	public List<Product> findByName(String term);
 
 	public void saveIvoice(Invoice invoice);
+
+	public Product findProductById(Long id);
 }
