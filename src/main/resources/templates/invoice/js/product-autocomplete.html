@@ -84,6 +84,7 @@
 			calculateAmount : function(id, price, quantity) {
 				$("#total_amount_" + id).html(
 					parseFloat(price) * parseInt(quantity));
+				this.calculateGrandTotal();
 
 			},
 			/*Funcion que se encarga de buscar linea por linea en el detalle de la factura si existe el ID
@@ -108,8 +109,21 @@
 				//actualizamos el importe o total, asi cada vez que varie la cantidad tenemos que vilver a calcular el importe
 				this.calculateAmount(id, price, quantity);
 			},
-			removeInvoiceLine : function(id){
-				 $("#row_"+id).remove();
+			removeInvoiceLine : function(id) {
+				$("#row_" + id).remove();
+				this.calculateGrandTotal();
+			},
+			calculateGrandTotal : function() {
+
+				var total = 0;
+				//expreción for each de jquery
+				// cualquier span que contenga total_amount_
+				//tenemos que colocal el carácter especial sombrero para la expreción regular ^
+				$('span[id^="total_amount_"]').each(function() {
+					total += parseFloat($(this).html());
+
+				});
+				$('#grand_total').html(total);
 			}
 
 		}
