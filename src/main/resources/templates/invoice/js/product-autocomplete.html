@@ -75,6 +75,10 @@
 							return false;
 						}
 					});
+				//eliminar el tbody
+				$("form").submit(function() {
+					$("#itemInvoiceTemplate").remove();
+				});
 			});
 
 		/* Función para calcular el importe, declaramos un objeto javascript, que va a ser un
