@@ -35,6 +35,22 @@ public class InvoinceController {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
+	@GetMapping("/show/{id}")
+	public String show(@PathVariable Long id, Model model, RedirectAttributes flash) {
+		Invoice invoice = clientService.findInvoiceById(id);
+		if (invoice == null) {
+			flash.addFlashAttribute("error", "The invoice does not exist!");
+			return "redirect:/list";
+
+		}
+
+		model.addAttribute("invoice", invoice);
+		model.addAttribute("title", "Invoice: ".concat(invoice.getDescription()));
+
+		return "invoice/show";
+
+	}
+
 	/**
 	 * Metodo para crear una factura en la vista, es importante mantener el objeto
 	 * factura dentro de una session mientras que se procesa el formulario, por eso
