@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+	<header th:replace="layout/layout :: header"></header>
+	<div class="container py-4">
+		<div class="card bg-ligth">
+			<div class="card-header" th:text="${title}"></div>
+			<div class="card-body">
+				<h4 class="card-title">
+					<a th:href="@{'/show/'} + ${invoice.client.id}"
+						class="btn btn-light btn-xd">&laquo; Back</a>
+				</h4>
+
+				<ul class="list-group my-2">
+					<li class="list-group-item list-group-item-primary"
+						th:text="'Client  details'"></li>
+					<li class="list-group-item" th:text="${invoice.client}"></li>
+					<li class="list-group-item" th:text="${invoice.client.email}"></li>
+				</ul>
+				<ul class="list-group">
+					<li class="list-group-item list-group-item-success"
+						th:text="'Invoice details'"></li>
+					<li class="list-group-item" th:text="'Invoice: ' + ${invoice.id}"></li>
+					<li class="list-group-item"
+						th:text="'Description: ' + ${invoice.description}"></li>
+					<li class="list-group-item"
+						th:text="'date: ' + ${invoice.createAt}"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
