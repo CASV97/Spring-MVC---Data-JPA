@@ -29,9 +29,9 @@
 						th:text="'date: ' + ${invoice.createAt}"></li>
 				</ul>
 				<div class="alert alert-info my-4"
-					th:if="${#list.isEmpty(invoice.items)}"
+					th:if="${#lists.isEmpty(invoice.items)}"
 					th:text="'Don´t have invoice items at:' + ${invoice.description} "></div>
-				<table th:if="${not #list.isEmpty(invoice.items)}"
+				<table th:if="${not #lists.isEmpty(invoice.items)}"
 					class="table table-striped table-hover table-bordered my-3">
 					<thead>
 						<tr>
@@ -56,10 +56,24 @@
 					Total
 					<span th:text="${invoice.total}" class="badge badge-secondary"></span>
 				</h5>
-
+				<!-- Añadiendo las observaciones le damos un borde y un maximo 
+				de tamaño flexible según la resoluciónF-->
+				<div class="card border-info mb-4" style="max-width: 20rem;">
+					<div class="card-header">Observations</div>
+					<div class="card-body">
+						<p th:text="${invoice.observation}" class="card-text"
+							th:if="${not #strings.isEmpty(invoice.observation)}"></p>
+						<h4 class="card-title"
+							th:if="${#strings.isEmpty(invoice.observation)}"
+							th:text="'Don´t have observations'"></h4>
+					</div>
+				</div>
+				<a th:href="@{'/show/'} + ${invoice.client.id}"
+					class="btn btn-light btn-xd">&laquo; Back</a>
 			</div>
 		</div>
 	</div>
-	<footer th:replace="layout/layout :: footer"></footer>
+	<footer th:replace="
+							layout/layout ::footer"> </footer>
 </body>
 </html>
