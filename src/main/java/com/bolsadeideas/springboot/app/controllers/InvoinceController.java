@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.bolsadeideas.springboot.app.models.dao.IInvoiceDao;
 import com.bolsadeideas.springboot.app.models.entity.Client;
 import com.bolsadeideas.springboot.app.models.entity.Invoice;
 import com.bolsadeideas.springboot.app.models.entity.InvoiceLineItem;
@@ -130,6 +131,23 @@ public class InvoinceController {
 		status.setComplete();
 		flash.addFlashAttribute("success", "Invoice was create successfuly");
 		return "redirect:/show/" + invoice.getClient().getId();
+	}
+
+	/**
+	 * Eliminar la factura, esté método retona un String un 'redirect:' , y para
+	 * devolver un mensaje al la vista se añade el parámetro RedirectAttributtes
+	 */
+	@GetMapping("/delete/{id}")
+	public String deleteInvoice(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
+		// Traemos a la factura simplemente para validad
+		Invoice invoice = clientService.findInvoiceById(id);
+		if (invoice != null) {
+			clientService.deleteInvoice(id);
+			flash.addFlashAttribute("success", " Invoice has deleted successufully");
+			return "redirect:/show/"+invoice.getClient().getId();
+		}
+		flash.addFlashAttribute("error", "Invoice Can`t delete");
+		return "redirect:/list";
 	}
 
 }

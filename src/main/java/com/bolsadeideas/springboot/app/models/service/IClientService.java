@@ -9,7 +9,7 @@ import com.bolsadeideas.springboot.app.models.entity.Client;
 import com.bolsadeideas.springboot.app.models.entity.Invoice;
 import com.bolsadeideas.springboot.app.models.entity.Product;
 
-/***/
+/** Clase de contrato de servicios y métodos del cliente */
 public interface IClientService {
 	public List<Client> findAll();
 
@@ -29,4 +29,7 @@ public interface IClientService {
 	public Product findProductById(Long id);
 
 	public Invoice findInvoiceById(Long id);
+
+	public void deleteInvoice(Long id);
+
 }

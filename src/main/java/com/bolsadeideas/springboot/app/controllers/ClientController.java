@@ -86,7 +86,7 @@ public class ClientController {
 	 * pagina actual mediante la ruta URL, por ejemplo podemos usar un
 	 * {@code RequestParam}
 	 */
-	@GetMapping("/list")
+	@GetMapping({"/list","/"})
 	public String showClientsList(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 		/*
 		 * forma que se usaba en Springboot 1.5.* Pageable pageRequest = new

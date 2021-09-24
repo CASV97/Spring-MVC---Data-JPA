@@ -37,6 +37,7 @@
 							<th>Date</th>
 							<th>Total</th>
 							<th>Show</th>
+							<th>Delete</th>
 
 						</tr>
 					</thead>
@@ -48,7 +49,15 @@
 							<td th:text="${invoice.total}"></td>
 							<td>
 								<a class="btn btn-primary btn-xs"
-									th:href="@{'/invoice/show/' + ${invoice.id}}" th:text="'Detail'"></a>
+									th:href="@{'/invoice/show/' + ${invoice.id}}"
+									th:text="'Detail'"></a>
+							</td>
+							<!-- Vamos a preguntar mediante Javascript si se está seguro de eliminar la factura -->
+							<td>
+								<a class="btn btn-danger btn-xs"
+									th:href="@{'/invoice/delete/' + ${invoice.id}}"
+									th:text="'delete'"
+									onclick="return confirm('Are you sure you want to delete the invoice?');"></a>
 							</td>
 						</tr>
 
