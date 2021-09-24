@@ -69,7 +69,7 @@ public class ClientController {
 	@GetMapping("/show/{id}")
 	public String showClientDetail(@PathVariable(name = "id") Long id, Map<String, Object> model,
 			RedirectAttributes flash) {
-		Client client = clientService.findOne(id);
+		Client client = clientService.fetchByIdWithInvoices(id);
 		if (client == null) {
 			flash.addFlashAttribute("error", "Client id doesn't exist in database");
 			return "redirect:/list";
@@ -86,7 +86,7 @@ public class ClientController {
 	 * pagina actual mediante la ruta URL, por ejemplo podemos usar un
 	 * {@code RequestParam}
 	 */
-	@GetMapping({"/list","/"})
+	@GetMapping({ "/list", "/" })
 	public String showClientsList(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 		/*
 		 * forma que se usaba en Springboot 1.5.* Pageable pageRequest = new

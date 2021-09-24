@@ -1,5 +1,6 @@
 package com.bolsadeideas.springboot.app.models.dao;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -22,5 +23,6 @@ import com.bolsadeideas.springboot.app.models.entity.Client;
  * @see Repository
  */
 public interface IClientDao extends PagingAndSortingRepository<Client, Long> {
-
+	@Query("select c from Client c LEFT JOIN FETCH c.invoices i where c.id=?1")
+	public Client fetchByIdWithInvoices(Long id);
 }

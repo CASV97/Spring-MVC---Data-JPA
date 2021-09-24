@@ -20,6 +20,8 @@ public interface IClientService {
 
 	public Client findOne(Long id);
 
+	public Client fetchByIdWithInvoices(long id);
+
 	public void delete(Long id);
 
 	public List<Product> findByName(String term);
@@ -32,6 +34,6 @@ public interface IClientService {
 
 	public void deleteInvoice(Long id);
 
-	public Invoice fecthInvoiceByIdWithClientWithInvoiceLineItemWithProduct(Long id);
+	public Invoice fetchInvoiceByIdWithClientWithInvoiceLineItemWithProduct(Long id);
 
 }

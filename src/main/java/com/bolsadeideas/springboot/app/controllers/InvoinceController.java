@@ -38,7 +38,7 @@ public class InvoinceController {
 
 	@GetMapping("/show/{id}")
 	public String show(@PathVariable Long id, Model model, RedirectAttributes flash) {
-		Invoice invoice = clientService.fecthInvoiceByIdWithClientWithInvoiceLineItemWithProduct(id);
+		Invoice invoice = clientService.fetchInvoiceByIdWithClientWithInvoiceLineItemWithProduct(id);
 		if (invoice == null) {
 			flash.addFlashAttribute("error", "The invoice does not exist!");
 			return "redirect:/list";

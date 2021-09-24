@@ -61,6 +61,13 @@ public class ClientServiceImpl implements IClientService {
 	public Client findOne(Long id) {
 		return clientDao.findById(id).orElse(null);
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Client fetchByIdWithInvoices(long id) {
+		// TODO Auto-generated method stub
+		return clientDao.fetchByIdWithInvoices(id);
+	}
 
 	@Transactional
 	@Override
@@ -110,8 +117,10 @@ public class ClientServiceImpl implements IClientService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Invoice fecthInvoiceByIdWithClientWithInvoiceLineItemWithProduct(Long id) {
+	public Invoice fetchInvoiceByIdWithClientWithInvoiceLineItemWithProduct(Long id) {
 		return invoiceDao.fecthByIdWithClientWithInvoiceLineItemWithProduct(id);
 	}
+
+
 
 }
