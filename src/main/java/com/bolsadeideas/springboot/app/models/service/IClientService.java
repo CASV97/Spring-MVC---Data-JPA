@@ -32,4 +32,6 @@ public interface IClientService {
 
 	public void deleteInvoice(Long id);
 
+	public Invoice fecthInvoiceByIdWithClientWithInvoiceLineItemWithProduct(Long id);
+
 }

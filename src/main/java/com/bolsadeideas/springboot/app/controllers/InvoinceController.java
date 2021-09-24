@@ -38,7 +38,7 @@ public class InvoinceController {
 
 	@GetMapping("/show/{id}")
 	public String show(@PathVariable Long id, Model model, RedirectAttributes flash) {
-		Invoice invoice = clientService.findInvoiceById(id);
+		Invoice invoice = clientService.fecthInvoiceByIdWithClientWithInvoiceLineItemWithProduct(id);
 		if (invoice == null) {
 			flash.addFlashAttribute("error", "The invoice does not exist!");
 			return "redirect:/list";
@@ -144,7 +144,7 @@ public class InvoinceController {
 		if (invoice != null) {
 			clientService.deleteInvoice(id);
 			flash.addFlashAttribute("success", " Invoice has deleted successufully");
-			return "redirect:/show/"+invoice.getClient().getId();
+			return "redirect:/show/" + invoice.getClient().getId();
 		}
 		flash.addFlashAttribute("error", "Invoice Can`t delete");
 		return "redirect:/list";

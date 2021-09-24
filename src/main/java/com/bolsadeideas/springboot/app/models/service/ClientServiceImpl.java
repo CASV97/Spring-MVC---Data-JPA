@@ -108,4 +108,10 @@ public class ClientServiceImpl implements IClientService {
 
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Invoice fecthInvoiceByIdWithClientWithInvoiceLineItemWithProduct(Long id) {
+		return invoiceDao.fecthByIdWithClientWithInvoiceLineItemWithProduct(id);
+	}
+
 }
