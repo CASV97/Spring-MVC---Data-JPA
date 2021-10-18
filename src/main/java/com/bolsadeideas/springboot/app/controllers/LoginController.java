@@ -5,6 +5,7 @@ import java.security.Principal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -19,7 +20,7 @@ public class LoginController {
 	 * por medio del Objeto {@link Principal} que contiene el usuario logueado
 	 */
 	@GetMapping("/login")
-	public String login(Model model, Principal principal, ModelAndView modelAndView, RedirectAttributes flash) {
+	public String login(Model model, Principal principal, ModelAndView modelAndView, RedirectAttributes flash,@RequestParam(name = "error",required = false) String error) {
 		/*
 		 * si el objeto Principal != null, es por que ya ha iniciado sesion
 		 * anteriormente para que no vuelva a iniciar sesion y tampoco vuelva a mostrar
@@ -29,6 +30,9 @@ public class LoginController {
 			// El usuario ya ha iniciado sesion
 			flash.addFlashAttribute("info", "user already logged in!!");
 			return "redirect:/";
+		}
+		if (error!=null) {
+			model.addAttribute("error","Login error, Username or password incorrect, please try again.");
 		}
 
 		return "login";
