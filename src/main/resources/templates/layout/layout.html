@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!-- espacio de nombres de thymeleaf y spriing security para thymeleaf -->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
 <meta charset="UTF-8" />
 <title
@@ -30,33 +32,7 @@
 			th:text="${info}"></div>
 	</header>
 	<div class="container"></div>
-	<footer th:fragment="footer" class="container">
-		<img alt="CASV group logo" th:src="@{/img/logoCASVgroup.png}">
-		<p>
-			Powered By
-			<a href="http://projects.spring.io/spring-boot/">Spring Boot</a>
-			and
-			<a href="http:www.thymeleaf.org">Thymeleaf</a>
-		</p>
-		<p>
-			This project was develop in Eclipse IDE + Spring Plugins (STS Spring
-			Tools Suite), Professional Christan Ariel Salazar.
-			<br>
-			&copy; Company 2020, All rigth reserved.
-		</p>
-		<!-- Como buena practica se coloca el JavaScript del documento al final del mismo, dentro de la etioqueta BODY Debes evitar
-		 poner los scripts en el header.
-		 El renderizado e interpretacion del HTML se realiza a medida que el navegador encuentra los elementos en tu documento HTML.
-		 Por lo tanto si encuentra en la cabecera una etiqueta script, pues tendrá que esperar a que el navegador cargue el script 
-		 para continuar con el renderizado de la pagina por lo que verías el navegador con la pantalla en blanco, comportamiento que
-		  uno desea evitar.
-		  El orden es importante, primero JQuery, popper, y despues bootstrap -->
-		<!-- Código javascript importado-->
-		<script th:src="@{/js/jquery-3.5.1.min.js}"></script>
-		<script th:src="@{/js/popper.min.js}"></script>
-		<script th:src="@{/js/bootstrap.min.js}"></script>
-		<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-		<script th:src="@{/js/jquery-ui.min.js}"></script>
+	<footer th:replace="components/footer :: footer" class="container">
 	</footer>
 </body>
 </html>

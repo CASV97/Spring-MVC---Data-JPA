@@ -20,7 +20,9 @@ public class LoginController {
 	 * por medio del Objeto {@link Principal} que contiene el usuario logueado
 	 */
 	@GetMapping("/login")
-	public String login(Model model, Principal principal, ModelAndView modelAndView, RedirectAttributes flash,@RequestParam(name = "error",required = false) String error) {
+	public String login(Model model, Principal principal, ModelAndView modelAndView, RedirectAttributes flash,
+			@RequestParam(name = "error", required = false) String error,
+			@RequestParam(name = "logout", required = false) String logout) {
 		/*
 		 * si el objeto Principal != null, es por que ya ha iniciado sesion
 		 * anteriormente para que no vuelva a iniciar sesion y tampoco vuelva a mostrar
@@ -31,8 +33,11 @@ public class LoginController {
 			flash.addFlashAttribute("info", "user already logged in!!");
 			return "redirect:/";
 		}
-		if (error!=null) {
-			model.addAttribute("error","Login error, Username or password incorrect, please try again.");
+		if (error != null) {
+			model.addAttribute("error", "Login error, Username or password incorrect, please try again.");
+		}
+		if (logout!=null) {
+			model.addAttribute("success", "Has logged out successfully");
 		}
 
 		return "login";
