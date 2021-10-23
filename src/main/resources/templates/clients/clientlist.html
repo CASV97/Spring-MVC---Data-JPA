@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="layout/layout :: head">
 </head>
 <body>
@@ -10,25 +11,24 @@
 		<div class="card bg-ligth">
 			<div class="card-header" th:text="${title}"></div>
 			<div class="card-body">
-				<h4 class="card-title">
-					<a class="btn btn-primary btn-xs" th:href="@{/form}">New Client</a>
-				</h4>
+				<h4 class="card-title"><a sec:authorize="hasRole('ROLE_ADMIN')"
+						class="btn btn-primary btn-xs" th:href="@{/form}">New Client</a></h4>
 				<table class="table table-striped">
 					<thead class="thead-dark">
 						<tr>
-							<th>ID</th>
+							<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">ID</th>
 							<th>First Name</th>
 							<th>Last Name</th>
 							<th>Email</th>
 							<th>Date</th>
-							<th>Create Invoice</th>
-							<th>Edit</th>
-							<th>Delete</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Create Invoice</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Edit</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Delete</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="client : ${clients}">
-							<td>
+							<td sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">
 								<a class="btn btn-primary btn-xs"
 									th:href="@{/show/} + ${client.id}" th:text="${client.id}"></a>
 							</td>
@@ -36,28 +36,29 @@
 							<td th:text="${client.lastName}"></td>
 							<td th:text="${client.email}"></td>
 							<td th:text="${client.createAt}"></td>
-							<td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
 								<!-- Enlace al controlador donde recibe un cliente por paámetro y
 							 muestra el formualrio para crear factura-->
 								<a class="btn btn-success btn-xs"
 									th:href="@{'/invoice/form/' + ${client.id}}"
 									th:text="'New Invoice'"></a>
 							</td>
-							<td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
 								<a class="btn btn-primary btn-xs"
 									th:href="@{/form/} + ${client.id}" th:text="Edit"></a>
 							</td>
-							<td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
 								<a class="btn btn-danger btn-xs"
 									th:href="@{/delete/} + ${client.id}" th:text="Delete"
 									onclick="return confirm('Are you sure do you want delete?')"></a>
 							</td>
 						</tr>
 					</tbody>
-				</table> <!-- Agregando el fragmento del paginador -->
+				</table>
+				<!-- Agregando el fragmento del paginador -->
 				<nav th:replace="components/paginator-nav :: paginator"></nav>
+			</div>
 		</div>
-	</div>
 	</div>
 	<!-- Footer -->
 	<footer th:replace="layout/layout :: footer"></footer>

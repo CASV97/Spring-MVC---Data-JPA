@@ -37,7 +37,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/uploads/**").hasAnyRole("USER")
 				.antMatchers("/form/**").hasAnyRole("ADMIN")
 				.antMatchers("/delete/**").hasAnyRole("ADMIN")
-				.antMatchers("/invoice/**").hasAnyRole("ADMIN")
+				.antMatchers("/invoice/**").hasAnyRole("ADMIN","USER")
 				.anyRequest().authenticated()
 				.and()
 				//Con el nombre de la ruta o el getmapping de la ruta

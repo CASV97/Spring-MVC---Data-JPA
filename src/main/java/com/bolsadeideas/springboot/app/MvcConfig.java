@@ -25,7 +25,7 @@ public class MvcConfig implements WebMvcConfigurer {
 	 */
 	public void addViewControllers(ViewControllerRegistry registry) {
 		// Con esto ya tenemos registrado el controlador parametrizable
-		registry.addViewController("/error_403").setViewName("requestErrors/error_403");
+		registry.addViewController("error_403").setViewName("requestErrors/error_403");
 	}
 
 	/* Ejemplo para subir imagenes a un directorio estático */
