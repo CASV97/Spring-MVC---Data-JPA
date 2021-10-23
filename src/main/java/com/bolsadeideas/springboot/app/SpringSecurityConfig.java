@@ -42,7 +42,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				//Con el nombre de la ruta o el getmapping de la ruta
 				.formLogin().loginPage("/login")
-				.permitAll().and().logout().permitAll();
+				.permitAll().and().logout().permitAll()
+				.and()
+				.exceptionHandling().accessDeniedPage("/error_403");
 	}
 
 	/**
