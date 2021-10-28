@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
@@ -21,6 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -98,7 +100,7 @@ public class ClientController {
 	 */
 	@GetMapping({ "/list", "/" })
 	public String showClientsList(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
-			Authentication authentication) {
+			Authentication authentication, HttpServletRequest request) {
 		// Es importante validar la autenticacion
 		if (authentication != null) {
 			logger.info("Hi! ".concat(authentication.getName()));
@@ -110,11 +112,45 @@ public class ClientController {
 		if (authentication != null) {
 			logger.info(
 					"Hi!, with static mode ".concat(SecurityContextHolder.getContext().getAuthentication().getName()));
-
+			/*
+			 * Forma1 de validar rol se tiene mas control y se pueden acceder a cada uno de
+			 * los roles y se puede trabajar con ellos
+			 */
 			if (hasRole("ROLE_ADMIN")) {
 				logger.info("Hi! ".concat(authentication.getName()).concat(" you have access to admin functions"));
 			} else {
 				logger.info("Hi! ".concat(authentication.getName()).concat(" you have not access to admin functions"));
+			}
+			/*
+			 * Forma2 Creamos la instancia de una clase de Spring Security
+			 * (SecurityContextHolderAwareRequestWrapper) que envuelve el objeto httpRequest
+			 * y nos permite validar el role, pero para esto necesitamos inyectar en el
+			 * método del controlador el objeto HttpServletRequest, y permite validar por el
+			 * prefijo del role, esto internamente hace lo mismo que hicimos al principio
+			 * con el método hasRole ya que internamente tambien recorre una coleccion de
+			 * roles y las valida
+			 * 
+			 */
+			SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(
+					request, "");
+			if (securityContext.isUserInRole("ROLE_ADMIN")) {
+				logger.info("Hi! ".concat(authentication.getName())
+						.concat(" you have access to admin functions using SecurityContextHolderAwareRequestWrapper"));
+
+			} else {
+
+				logger.info("Hi! ".concat(authentication.getName()).concat(
+						" you have not access to admin functions using SecurityContextHolderAwareRequestWrapper"));
+			}
+			/* Forma 3 con el ol objeto request */
+			if (request.isUserInRole("ROLE_ADMIN")) {
+				logger.info("Hi! ".concat(authentication.getName())
+						.concat(" you have access to admin functions using HttpServletRequest"));
+
+			} else {
+
+				logger.info("Hi! ".concat(authentication.getName())
+						.concat(" you have not access to admin functions using HttpServletRequest"));
 			}
 
 			/*
