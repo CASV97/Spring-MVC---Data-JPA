@@ -25,15 +25,21 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
-		//Administrador de Map para los mensajes Flash
-		SessionFlashMapManager flashMapManager =new SessionFlashMapManager();
-		//Crear un flash con los mensajes del tipo FlashMap
-		FlashMap flashMap =new FlashMap();
-		flashMap.put("success", "Session initialized successfully");
-		//registramos el flashMap en el Mannager
+		// Administrador de Map para los mensajes Flash
+		SessionFlashMapManager flashMapManager = new SessionFlashMapManager();
+		// Crear un flash con los mensajes del tipo FlashMap
+		FlashMap flashMap = new FlashMap();
+		flashMap.put("success", "Hi!!.. " + authentication.getName() + " Session initialized successfully");
+		// registramos el flashMap en el Mannager
 		flashMapManager.saveOutputFlashMap(flashMap, request, response);
+		// utilizamos objeto logger de la clase padre
+		// SimpleUrlAuthenticationSuccessHandler
+		if (authentication != null) {
+			logger.info("the user '" + authentication.getName() + "' has logged successfully!!");
+
+		}
+
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
-	
 
 }

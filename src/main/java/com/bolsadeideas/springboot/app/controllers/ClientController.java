@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,6 +43,8 @@ public class ClientController {
 
 	@Autowired
 	private IUploadFileService uploadFileService;
+	// logger copiado de AbstractAuthenticationTargetUrlRequestHandler
+	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	/**
 	 * Esta Url es la misma que teníamos antes solo que agrega un parámetro que va a
@@ -87,7 +93,17 @@ public class ClientController {
 	 * {@code RequestParam}
 	 */
 	@GetMapping({ "/list", "/" })
-	public String showClientsList(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+	public String showClientsList(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
+			Authentication authentication) {
+		// Es importante validar la autenticacion
+		if (authentication != null) {
+			logger.info("Hi! ".concat(authentication.getName()));
+		}
+		// obtener la autenticacion de forma estática
+		// Authentication auth= SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null) {
+			logger.info("Hi!, with static mode ".concat(SecurityContextHolder.getContext().getAuthentication().getName()));
+		}
 		/*
 		 * forma que se usaba en Springboot 1.5.* Pageable pageRequest = new
 		 * PageRequest(page,size);
