@@ -14,15 +14,18 @@ import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.bolsadeideas.springboot.app.auth.handler.LoginSuccessHandler;
+
 /**
  * Esta clase de congfiguracion de Spring es para Spring security, de debe
  * extender de {@code WebSecurityConfigurerAdapter},
  * 
- * @author ariel
+ * @author CASV97
  */
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-
+	@Autowired
+	private LoginSuccessHandler successHandler;
 	/**
 	 * Añadiendo método configure(HttpSecurity http) para las reglas ACL en las
 	 * rutas invocando el objeto http vamos a invocar el metodo authorizeRequest() y
@@ -41,7 +44,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 				//Con el nombre de la ruta o el getmapping de la ruta
-				.formLogin().loginPage("/login")
+				.formLogin().successHandler(successHandler)
+				.loginPage("/login")
 				.permitAll().and().logout().permitAll()
 				.and()
 				.exceptionHandling().accessDeniedPage("/error_403");

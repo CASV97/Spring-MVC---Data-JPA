@@ -17,7 +17,7 @@ import com.bolsadeideas.springboot.app.models.entity.Client;
  * recursos solo tiene que heredar de {@code PagingAndSortingRepository} que a
  * su vez hereda de {@code CrudRepository}
  * 
- * @author Ariel
+ * @author CASV97
  * @see PagingAndSortingRepository
  * @see CrudRepository
  * @see Repository

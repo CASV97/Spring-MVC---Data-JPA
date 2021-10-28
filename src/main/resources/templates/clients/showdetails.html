@@ -54,7 +54,7 @@
 									th:href="@{'/invoice/show/' + ${invoice.id}}"
 									th:text="'Detail'"></a>
 							</td>
-							<!-- Vamos a preguntar mediante Javascript si se está seguro de eliminar la factura -->
+							<!-- Vamos a preguntar mediante  Javascript si se está seguro de eliminar la factura -->
 							<td sec:authorize="hasRole('ROLE_ADMIN')">
 								<a class="btn btn-danger btn-xs"
 									th:href="@{'/invoice/delete/' + ${invoice.id}}"
