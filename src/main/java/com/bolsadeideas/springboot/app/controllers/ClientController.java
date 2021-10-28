@@ -2,6 +2,7 @@ package com.bolsadeideas.springboot.app.controllers;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -16,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -99,25 +103,36 @@ public class ClientController {
 		if (authentication != null) {
 			logger.info("Hi! ".concat(authentication.getName()));
 		}
-		// obtener la autenticacion de forma estática
-		// Authentication auth= SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null) {
-			logger.info("Hi!, with static mode ".concat(SecurityContextHolder.getContext().getAuthentication().getName()));
-		}
 		/*
-		 * forma que se usaba en Springboot 1.5.* Pageable pageRequest = new
-		 * PageRequest(page,size);
+		 * obtener la autenticacion de forma estática Authentication auth=
+		 * SecurityContextHolder.getContext().getAuthentication();
 		 */
-		Pageable pageRequest = PageRequest.of(page, 8);
+		if (authentication != null) {
+			logger.info(
+					"Hi!, with static mode ".concat(SecurityContextHolder.getContext().getAuthentication().getName()));
 
-		Page<Client> clients = clientService.findAll(pageRequest);
+			if (hasRole("ROLE_ADMIN")) {
+				logger.info("Hi! ".concat(authentication.getName()).concat(" you have access to admin functions"));
+			} else {
+				logger.info("Hi! ".concat(authentication.getName()).concat(" you have not access to admin functions"));
+			}
 
-		PageRender<Client> pageRender = new PageRender<>("/list", clients);
-		// pasando datos a la vista
-		model.addAttribute("title", "Client List");
-		model.addAttribute("clients", clients);
-		model.addAttribute("page", pageRender);
-		return "clients/clientlist";
+			/*
+			 * forma que se usaba en Springboot 1.5.* Pageable pageRequest = new
+			 * PageRequest(page,size);
+			 */
+			Pageable pageRequest = PageRequest.of(page, 8);
+
+			Page<Client> clients = clientService.findAll(pageRequest);
+
+			PageRender<Client> pageRender = new PageRender<>("/list", clients);
+			// pasando datos a la vista
+			model.addAttribute("title", "Client List");
+			model.addAttribute("clients", clients);
+			model.addAttribute("page", pageRender);
+			return "clients/clientlist";
+		}
+		return "redirect:/login";
 	}
 
 	/**
@@ -217,5 +232,47 @@ public class ClientController {
 
 		}
 		return "redirect:/list";
+	}
+
+	/**
+	 * Validar si el usuario tiene el rol de forma programatica, y obtenemos el
+	 * objeto Authentication de forma estática
+	 *
+	 * 
+	 * @return {@link Boolean} <code>false</code> si no tiene acceso
+	 */
+	private boolean hasRole(String roleName) {
+		SecurityContext context = SecurityContextHolder.getContext();
+		// si el contexto es nulo, no tiene acceso
+		if (context == null) {
+			return false;
+		}
+		Authentication auth = context.getAuthentication();
+		// si la autenticacion es nula no tiene acceso
+		if (auth == null) {
+			return false;
+		}
+		/*
+		 * Atravez del objeto Athentication obtenemos una coleccion de Roles o
+		 * (Authorities) la coleccion es de cualquier tipo que implemente la interfaz
+		 * GrantedAuthority, cualquier calse Role o que representa un rol en nuestra
+		 * aplicacion, tiene que implemetar esta interfaz Con signo ? implementamos un
+		 * generico, con esto decimos que es una coleccion de cualquier tipo de objeto
+		 * que implemete o herede esta interfaz
+		 */
+		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+		/*
+		 * iteramos y preguntamos por cada authority si es igual al que pasamos por
+		 * parámetro,podemos obtener de esta forma el nombre del rol
+		 */
+		/*
+		 * for (GrantedAuthority authority : authorities) { if
+		 * (roleName.equals(authority.getAuthority())) {
+		 * logger.info("Hi! ".concat(auth.getName()).concat(" your role is: ".concat(
+		 * authority.getAuthority()))); return true; } } return false;
+		 */
+		/* En vez de usar el le pasamos una instancia concreta con el valor del role */
+		return authorities.contains(new SimpleGrantedAuthority(roleName));
+
 	}
 }
