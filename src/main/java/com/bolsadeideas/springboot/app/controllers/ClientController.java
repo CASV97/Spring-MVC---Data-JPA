@@ -109,7 +109,7 @@ public class ClientController {
 			Authentication authentication, HttpServletRequest request) {
 		// Es importante validar la autenticacion
 		if (authentication != null) {
-			logger.info("Hi! ".concat(authentication.getName()));
+			logger.info("\nHi! ".concat(authentication.getName()));
 		}
 		/*
 		 * obtener la autenticacion de forma estática Authentication auth=

@@ -5,7 +5,9 @@ package com.bolsadeideas.springboot.app;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 //import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,6 +16,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
+	
+	/**
+	 * Registramos el password encoder como por defecto en nuestra configuracion de
+	 * spring security, con este password encoder podemos crear los usuarios y
+	 * encriptar su contraseña, este metodo quedará disponible dentro del contexto
+	 * de spring security
+	 */
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+
+		return new BCryptPasswordEncoder();
+	}
 
 	/**
 	 * <h3>addViewControllers(registry)</h3>
@@ -25,6 +39,7 @@ public class MvcConfig implements WebMvcConfigurer {
 	 */
 	public void addViewControllers(ViewControllerRegistry registry) {
 		// Con esto ya tenemos registrado el controlador parametrizable
+		log.trace("\n Registrando Controladores parametrizables estáticos sin logica");
 		registry.addViewController("error_403").setViewName("requestErrors/error_403");
 	}
 

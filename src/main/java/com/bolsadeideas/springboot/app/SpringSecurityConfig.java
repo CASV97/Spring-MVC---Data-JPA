@@ -4,7 +4,6 @@
 package com.bolsadeideas.springboot.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -23,11 +22,14 @@ import com.bolsadeideas.springboot.app.auth.handler.LoginSuccessHandler;
  * 
  * @author CASV97
  */
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private LoginSuccessHandler successHandler;
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	/**
 	 * Añadiendo método configure(HttpSecurity http) para las reglas ACL en las
@@ -53,18 +55,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * Registramos el password encoder como por defecto en nuestra configuracion de
-	 * spring security, con este password encoder podemos crear los usuarios y
-	 * encriptar su contraseña, este metodo quedará disponible dentro del contexto
-	 * de spring security
-	 */
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-
-		return new BCryptPasswordEncoder();
-	}
-
-	/**
 	 * Tenemos que registrar un método para poder registrar y configurar los
 	 * usuarios de nuestro sistema de seguridad
 	 * 
@@ -75,7 +65,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception {
 		// para versiones anteriores de Spring boot
 		// UserBuilder users=User.withDefaultPasswordEncoder();
-		PasswordEncoder encoder = passwordEncoder();
+		PasswordEncoder encoder = this.passwordEncoder;
 		// para las nuevas versiones y lleva una funcion lambda por que por cada usuario
 		// que registremos se genera un evento que va a encriptar la contraseña
 		// (parametro -> return)
