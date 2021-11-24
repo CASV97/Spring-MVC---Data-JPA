@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -64,6 +65,7 @@ public class ClientController {
 	 * @return {@link ResponseEntity} vamos a retornar un recurso o imagen a la
 	 *         respuesta http
 	 */
+	@Secured("ROLE_USER")
 	@GetMapping("/uploads/{filename:.+}")
 	public ResponseEntity<Resource> showPhoto(@PathVariable String filename) {
 		Resource resource = null;
@@ -78,6 +80,7 @@ public class ClientController {
 	}
 
 	/** Ver el detalle y la foto del cliente */
+	@Secured("ROLE_USER")
 	@GetMapping("/show/{id}")
 	public String showClientDetail(@PathVariable(name = "id") Long id, Map<String, Object> model,
 			RedirectAttributes flash) {
@@ -98,6 +101,7 @@ public class ClientController {
 	 * pagina actual mediante la ruta URL, por ejemplo podemos usar un
 	 * {@code RequestParam}
 	 */
+	@Secured("ROLE_USER")
 	@GetMapping({ "/list", "/" })
 	public String showClientsList(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication, HttpServletRequest request) {
@@ -176,6 +180,7 @@ public class ClientController {
 	 * Model, o puede recibir un Map de java.util, en vez de usar addAttribute,
 	 * vamos a usar put
 	 */
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/form")
 	public String create(Map<String, Object> model) {
 		// creamos la instancia del objeto entidad que esta mapeado a la tabla de la
@@ -192,6 +197,7 @@ public class ClientController {
 	 * formulario, vamos a tener un metodo que se encarge de procesar estos datos
 	 * aqui se elimina el atributo de session
 	 */
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/form")
 	public String save(@Valid Client client, BindingResult result, Model model,
 			@RequestParam("file") MultipartFile photoFile, RedirectAttributes flash, SessionStatus status) {
@@ -237,6 +243,7 @@ public class ClientController {
 	 * Para editar lo hacemos con el parametro id y en la vista list creamos el link
 	 * para editar requestMapping sin el metodo por defeto es un GET
 	 */
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form/{id}")
 	public String edit(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 		Client client = null;
@@ -255,6 +262,7 @@ public class ClientController {
 		return "clients/form";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if (id > 0) {

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +26,7 @@ import com.bolsadeideas.springboot.app.models.entity.Invoice;
 import com.bolsadeideas.springboot.app.models.entity.InvoiceLineItem;
 import com.bolsadeideas.springboot.app.models.entity.Product;
 import com.bolsadeideas.springboot.app.models.service.IClientService;
-
+@Secured("ROLE_ADMIN")
 @Controller
 @RequestMapping("/invoice")
 @SessionAttributes("invoice")
@@ -34,7 +35,6 @@ public class InvoinceController {
 	private IClientService clientService;
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
-
 	@GetMapping("/show/{id}")
 	public String show(@PathVariable Long id, Model model, RedirectAttributes flash) {
 		Invoice invoice = clientService.fetchInvoiceByIdWithClientWithInvoiceLineItemWithProduct(id);

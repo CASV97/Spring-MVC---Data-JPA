@@ -10,8 +10,8 @@
 			<div class="card-body">
 				<h4 class="card-title">
 					<!-- Enlace al controlador donde recibe un cliente por paámetro y
-							 muestra el formualrio para crear factura--> <a
-						sec:authorize="hasRole('ROLE_ADMIN')"
+							 muestra el formualrio para crear factura-->
+					<a sec:authorize="hasRole('ROLE_ADMIN')"
 						class="btn btn-primary btn-xs"
 						th:href="@{'/invoice/form/' + ${client.id}}"
 						th:text="'New Invoice'"></a>
@@ -38,7 +38,7 @@
 							<th>Description</th>
 							<th>Date</th>
 							<th>Total</th>
-							<th>Show</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Show</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Delete</th>
 
 						</tr>
@@ -49,7 +49,7 @@
 							<td th:text="${invoice.description}"></td>
 							<td th:text="${invoice.createAt}"></td>
 							<td th:text="${invoice.total}"></td>
-							<td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
 								<a class="btn btn-primary btn-xs"
 									th:href="@{'/invoice/show/' + ${invoice.id}}"
 									th:text="'Detail'"></a>

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -22,10 +23,12 @@ import com.bolsadeideas.springboot.app.auth.handler.LoginSuccessHandler;
  * 
  * @author CASV97
  */
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private LoginSuccessHandler successHandler;
+
 	/**
 	 * Añadiendo método configure(HttpSecurity http) para las reglas ACL en las
 	 * rutas invocando el objeto http vamos a invocar el metodo authorizeRequest() y
@@ -36,19 +39,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/img/**").permitAll()
-				.antMatchers("/show/**").hasAnyRole("USER")
-				.antMatchers("/uploads/**").hasAnyRole("USER")
-				.antMatchers("/form/**").hasAnyRole("ADMIN")
-				.antMatchers("/delete/**").hasAnyRole("ADMIN")
-				.antMatchers("/invoice/**").hasAnyRole("ADMIN","USER")
-				.anyRequest().authenticated()
-				.and()
-				//Con el nombre de la ruta o el getmapping de la ruta
-				.formLogin().successHandler(successHandler)
-				.loginPage("/login")
-				.permitAll().and().logout().permitAll()
-				.and()
-				.exceptionHandling().accessDeniedPage("/error_403");
+				/*
+				 * .antMatchers("/show/**").hasAnyRole("USER")
+				 * .antMatchers("/uploads/**").hasAnyRole("USER")
+				 * .antMatchers("/form/**").hasAnyRole("ADMIN")
+				 * .antMatchers("/delete/**").hasAnyRole("ADMIN")
+				 * .antMatchers("/invoice/**").hasAnyRole("ADMIN","USER")
+				 */
+				.anyRequest().authenticated().and()
+				// Con el nombre de la ruta o el getmapping de la ruta
+				.formLogin().successHandler(successHandler).loginPage("/login").permitAll().and().logout().permitAll()
+				.and().exceptionHandling().accessDeniedPage("/error_403");
 	}
 
 	/**
