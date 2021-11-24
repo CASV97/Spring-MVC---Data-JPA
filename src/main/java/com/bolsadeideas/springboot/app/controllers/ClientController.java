@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -101,7 +102,8 @@ public class ClientController {
 	 * pagina actual mediante la ruta URL, por ejemplo podemos usar un
 	 * {@code RequestParam}
 	 */
-	@Secured("ROLE_USER")
+//	@Secured("ROLE_USER")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping({ "/list", "/" })
 	public String showClientsList(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication, HttpServletRequest request) {
