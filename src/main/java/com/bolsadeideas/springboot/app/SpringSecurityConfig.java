@@ -51,6 +51,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	/**
 	 * para autenticar mediante JDBC
+	 * se realiza consulta 
 	 * 
 	 * @param {@code {@link AuthenticationManagerBuilder}} Para registrar nuestros
 	 *               usuarios
@@ -58,9 +59,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception {
 		builder.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
-				.usersByUsernameQuery("select username,password,enable from users where username=? ")
+				.usersByUsernameQuery("select username,password,enable "
+						+ "from users "
+						+ "where username=? ")
 				.authoritiesByUsernameQuery(
-						"select u.username,a.authority from authorities a inner join users u on (a.user_id=u.id) where username=?");
+						"select u.username,a.authority "
+						+ "from authorities a "
+						+ "inner join users u on (a.user_id=u.id) where username=?");
 	}
 
 }
