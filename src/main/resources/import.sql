@@ -44,3 +44,15 @@ INSERT INTO invoice_items(quantity,invoice_id,product_id) VALUES(5,1,5);
 
 INSERT INTO invoices(description,observation,client_id,create_at) VALUES('Factura nueva ','observación alguna',1,NOW());
 INSERT INTO invoice_items(quantity,invoice_id,product_id) VALUES(3,2,6);
+
+/*Insertar usuarios*/
+insert into users(username,password,enable) values('admin','$2a10$9mBEmb1Ct1DgFk1I/gKawO9BIAWQPS6k1KdTPCq8iCsRdVETDftge',1);
+insert into users(username,password,enable) values('ariel','$2a10$d8xddIdqzPIS4DYi6xvq.uWhsP5pKcpYsxsa8Thu6Wv2eD339vxmW',1);
+insert into users(username,password,enable) values('debbie','$2a$10$intgvJKOy1C99e/G.AGktu3jwpFeUXVLoQG5dzHTHe8o5u2phv0bG',1);
+
+/*Insertar Roles*/
+insert into authorities (user_id,authority) values(1,'ROLE_USER');
+insert into authorities (user_id,authority) values(2,'ROLE_USER');
+insert into authorities (user_id,authority) values(2,'ROLE_ADMIN');
+insert into authorities (user_id,authority) values(3,'ROLE_USER');
+insert into authorities (user_id,authority) values(3,'ROLE_ADMIN');

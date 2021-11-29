@@ -35,7 +35,7 @@ public class JpaUserDetailService implements UserDetailsService {
 
 	/**
 	 * cagamos los datos del usuario y devolvemos un objeto del tipo UserDetail que
-	 * representa el usuario identificado
+	 * representa el usuario identificadoS
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -49,13 +49,13 @@ public class JpaUserDetailService implements UserDetailsService {
 		// 2 obtenemos los role y los registramos dentro de una lista de
 		// GrantedAuthority
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		if (authorities.isEmpty()) {
-			logger.info("User " + username + " dont have assigned roles");
-			throw new UsernameNotFoundException("User " + username + " dont have assigned roles");
-		}
 		// por cada rol del usuario lo guardamos en la lista de roles
 		for (Role role : user.getRoles()) {
 			authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+		}
+		if (authorities.isEmpty()) {
+			logger.info("User " + username + " dont have assigned roles");
+			throw new UsernameNotFoundException("User " + username + " dont have assigned roles");
 		}
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
 				user.getEnable(), /* accountNonExpired */ true, /* credentialsNonExpired */ true,
