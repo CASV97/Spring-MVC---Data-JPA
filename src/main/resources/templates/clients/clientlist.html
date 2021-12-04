@@ -11,16 +11,18 @@
 		<div class="card bg-ligth">
 			<div class="card-header" th:text="${title}"></div>
 			<div class="card-body">
-				<h4 class="card-title"><a sec:authorize="hasRole('ROLE_ADMIN')"
-						class="btn btn-primary btn-xs" th:href="@{/form}">New Client</a></h4>
+				<h4 class="card-title">
+					<a sec:authorize="hasRole('ROLE_ADMIN')"
+						class="btn btn-primary btn-xs" th:href="@{/form}">New Client</a>
+				</h4>
 				<table class="table table-striped">
 					<thead class="thead-dark">
 						<tr>
 							<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">ID</th>
-							<th>First Name</th>
-							<th>Last Name</th>
-							<th>Email</th>
-							<th>Date</th>
+							<th th:text="#{text.person.name}"></th>
+							<th th:text="#{text.person.lastName}"></th>
+							<th th:text="#{text.person.email}"></th>
+							<th th:text="#{text.person.createAt}"></th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Create Invoice</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Edit</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Delete</th>
