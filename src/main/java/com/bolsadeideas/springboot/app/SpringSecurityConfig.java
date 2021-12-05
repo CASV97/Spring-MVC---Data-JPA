@@ -41,7 +41,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/img/**").permitAll()
+		http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/img/**","/locale").permitAll()
 
 				.anyRequest().authenticated().and()
 				// Con el nombre de la ruta o el getmapping de la ruta
