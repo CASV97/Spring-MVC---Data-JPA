@@ -3,6 +3,7 @@ package com.bolsadeideas.springboot.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,6 +55,10 @@ public class ClientController {
 	private IUploadFileService uploadFileService;
 	// logger copiado de AbstractAuthenticationTargetUrlRequestHandler
 	protected final Log logger = LogFactory.getLog(this.getClass());
+
+	// para obtener el idioma
+	@Autowired
+	private MessageSource messageSource;
 
 	/**
 	 * Esta Url es la misma que teníamos antes solo que agrega un parámetro que va a
@@ -106,7 +112,7 @@ public class ClientController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping({ "/list", "/" })
 	public String showClientsList(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
-			Authentication authentication, HttpServletRequest request) {
+			Authentication authentication, HttpServletRequest request, Locale locale) {
 		// Es importante validar la autenticacion
 		if (authentication != null) {
 			logger.info("\nHi! ".concat(authentication.getName()));
@@ -169,7 +175,7 @@ public class ClientController {
 
 			PageRender<Client> pageRender = new PageRender<>("/list", clients);
 			// pasando datos a la vista
-			model.addAttribute("title", "Client List");
+			model.addAttribute("title", messageSource.getMessage("text.view.client.list.title", null, locale));
 			model.addAttribute("clients", clients);
 			model.addAttribute("page", pageRender);
 			return "clients/clientlist";

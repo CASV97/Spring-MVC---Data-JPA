@@ -32,12 +32,12 @@ public class SpringBootDataJpaApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		uploadFileService.deleteAll();
 		uploadFileService.init();
-
-		String password2 = "debbie";
-		String password3 = "admin";
-
-		log.warn("\n debbie: " + passwordEncoder.encode(password2));
-		log.warn("\n admin: " + passwordEncoder.encode(password3));
+		/*
+		 * String admin = "admin"; String ariel = "ariel"; String debbie = "debbie";
+		 * log.warn("\n admin: " + passwordEncoder.encode(admin)); log.warn("\n ariel: "
+		 * + passwordEncoder.encode(ariel)); log.warn("\n debbie: " +
+		 * passwordEncoder.encode(debbie));
+		 */
 
 		log.warn("\nProyect Initialized");
 	}
